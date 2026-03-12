@@ -1,0 +1,80 @@
+<div class="container py-4">
+
+  <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5 mt-2 gap-3">
+    <div class="text-center text-md-start">
+      <h2 class="h3 fw-bold mb-0">Good {{ timeOfDay }}, {{ userName.split(' ')[0] }}</h2>
+    </div>
+
+    <div class="text-end">
+      <div class="h4 fw-bold mb-0">{{ clockHour }}:{{ clockMinute }} {{ clockAmPm }}</div>
+      <div class="small text-muted">{{ clockDay }}, {{ clockDate }}</div>
+    </div>
+  </header>
+
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-dark" role="status"></div>
+      <p class="text-muted small mt-2">Loading data...</p>
+    </div>
+  } @else if (isError) {
+    <div class="alert alert-danger border-0 d-flex align-items-center py-4">
+      <i class="fas fa-exclamation-circle fa-2x me-3 opacity-50"></i>
+      <div>{{ errorMessage || 'Unable to load dashboard data.' }}</div>
+    </div>
+  } @else {
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-7">
+        <div class="card border-0 shadow-sm mb-4 overflow-hidden">
+          <div class="card-body p-0">
+
+            <!-- Card Header -->
+            <div class="d-flex justify-content-between align-items-center p-4 bg-dark text-white">
+              <h4 class="h5 fw-bold mb-0">{{ getHomeDisplayDate() }}</h4>
+              <div class="d-flex gap-2">
+                @if (selectedHomeDate) {
+                  <button class="btn btn-sm btn-light px-2 border-0" (click)="resetHomeDate()" title="Reset to Today">
+                    <i class="fas fa-sync-alt"></i>
+                  </button>
+                }
+                <div class="position-relative">
+                  <button class="btn btn-sm btn-light px-2 border-0" (click)="triggerDatePicker()">
+                    <i class="fa-regular fa-calendar"></i>
+                  </button>
+                  <input #dateInput type="date"
+                    class="position-absolute opacity-0"
+                    style="left: 0; bottom: 0; width: 0; height: 0;"
+                    (change)="onHomeDateChange($event)"
+                    [max]="maxDate" [min]="minDate">
+                </div>
+              </div>
+            </div>
+
+            <!-- Stats List -->
+            <div class="list-group list-group-flush">
+              <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
+                <span class="text-muted fw-semibold">Total Workers</span>
+                <span class="badge bg-secondary px-3 py-2 fw-bold">{{ homeData?.totalWorkers || '-' }}</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
+                <span class="text-muted fw-semibold">Shifts Completed</span>
+                <span class="badge bg-dark px-3 py-2 fw-bold">{{ homeData?.completedShifts ?? '-' }}</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
+                <span class="text-muted fw-semibold">Active on Duty</span>
+                <span class="badge bg-dark px-3 py-2 fw-bold">{{ homeData?.inProgressShifts ?? '-' }}</span>
+              </div>
+              <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
+                <span class="text-muted fw-semibold">Pending Sign-in</span>
+                <span class="badge bg-secondary px-3 py-2 fw-bold">
+                  {{ (homeData?.totalWorkers || 0) - ((homeData?.completedShifts || 0) + (homeData?.inProgressShifts || 0)) }}
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+</div>

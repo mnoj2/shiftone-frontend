@@ -1,0 +1,79 @@
+<div class="container py-4">
+  <h2 class="h3 fw-bold mb-4 mt-2">My Work History</h2>
+
+  <div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+
+      @if (isLoading) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-dark mb-2" role="status"></div>
+          <p class="text-muted small">Loading history...</p>
+        </div>
+      } @else if (isError) {
+        <div class="alert alert-danger border-0">
+          <i class="fas fa-exclamation-triangle me-2"></i> {{ errorMessage }}
+        </div>
+      } @else if (workHistory.length === 0) {
+        <div class="text-center py-5 border rounded bg-white">
+          <i class="fas fa-history fa-3x text-muted mb-3 opacity-25"></i>
+          <p class="text-muted mb-0">No records found.</p>
+        </div>
+      } @else {
+        <ag-grid-angular
+          style="width: 100%;"
+          [rowData]="workHistory"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [animateRows]="true"
+          [pagination]="true"
+          [paginationPageSizeSelector]="false"
+          [paginationPageSize]="8"
+          [domLayout]="'autoHeight'"
+          [theme]="gridTheme"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+      }
+
+    </div>
+  </div>
+</div>
+
+
+<!-- Auto Sign-off Modal -->
+@if (showAutoSignOffModal) {
+<div class="modal d-block" style="background: rgba(0,0,0,0.5)" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg">
+
+      <div class="modal-header border-bottom-0 p-4 pb-0">
+        <h5 class="modal-title fw-bold">Sign-off Details</h5>
+        <button type="button" class="btn-close" (click)="showAutoSignOffModal = false"></button>
+      </div>
+
+      <div class="modal-body p-4">
+        <div class="mb-3 p-3 border rounded bg-white">
+          <span class="text-muted small">Sign-in Time</span>
+          <div class="fw-semibold">{{ formatTime(pendingRecord?.signInTime) }}</div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold">Actual Sign-off Time</label>
+          <input type="time" class="form-control" [(ngModel)]="pendingSignOffTimeInput">
+        </div>
+
+        <button class="btn btn-dark w-100 py-2 fw-bold"
+          (click)="onConfirmAutoSignOff()"
+          [disabled]="!pendingSignOffTimeInput || isConfirming">
+          @if (isConfirming) {
+            <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+            Confirming...
+          } @else {
+            Confirm Sign-off
+          }
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+}
