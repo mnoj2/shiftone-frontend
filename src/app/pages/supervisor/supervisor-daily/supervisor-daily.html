@@ -1,19 +1,19 @@
-<div class="container py-4">
+<div class="container py-0">
   <div class="card border-0 shadow-sm mt-2">
-    <div class="card-body p-4">
+    <div class="card-body p-4 pb-3">
 
       <div class="row g-3 mb-4">
         <div class="col-lg-8">
           <div class="row g-2 align-items-end">
-            <div class="col-sm-5 col-6">
+            <div class="col-sm-3 col-3 me-2">
               <label class="form-label fw-semibold small text-muted mb-1">Start Date</label>
               <input type="date" class="form-control" [(ngModel)]="dailyStart">
             </div>
-            <div class="col-sm-5 col-6">
+            <div class="col-sm-3 col-3">
               <label class="form-label fw-semibold small text-muted mb-1">End Date</label>
               <input type="date" class="form-control" [(ngModel)]="dailyEnd">
             </div>
-            <div class="col-sm-2 col-12 mt-3 mt-sm-0">
+            <div class="col-sm-2 ms-3 col-12 mt-3 mt-sm-0">
               <button class="btn btn-dark w-100 fw-bold" (click)="filterDaily()">
                 <i class="fa-solid fa-filter me-1"></i>Filter
               </button>
@@ -21,8 +21,8 @@
           </div>
         </div>
         <div class="col-lg-4 d-flex justify-content-lg-end align-items-end mt-3 mt-lg-0">
-          <button class="btn btn-outline-dark fw-bold" (click)="exportDaily()">
-            <i class="fa-solid fa-file-export me-2"></i>Export CSV
+          <button class="btn btn-dark fw-bold" (click)="exportDaily()">
+            <i class="fa-solid fa-file-export me-2"></i>Export
           </button>
         </div>
       </div>

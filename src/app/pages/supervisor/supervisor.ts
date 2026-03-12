@@ -4,12 +4,11 @@ import { Router } from '@angular/router';
 import { TokenService } from '../../core/token.service';
 import { SupervisorHome } from './supervisor-home/supervisor-home';
 import { SupervisorDaily } from './supervisor-daily/supervisor-daily';
-import { SupervisorAnalytics } from './supervisor-analytics/supervisor-analytics';
 
 @Component({
   selector: 'supervisor',
   standalone: true,
-  imports: [CommonModule, SupervisorHome, SupervisorDaily, SupervisorAnalytics],
+  imports: [CommonModule, SupervisorHome, SupervisorDaily],
   templateUrl: './supervisor.html',
   styleUrls: ['./supervisor.scss']
 })

@@ -12,15 +12,12 @@
       </button>
 
       <div class="collapse navbar-collapse" id="supervisorNavbar">
-        <ul class="nav nav-pills mx-auto mt-3 mt-lg-0">
+        <ul class="nav mx-auto mt-3 mt-lg-0 d-flex gap-3">
           <li class="nav-item">
-            <button class="nav-link px-3 fw-semibold" [class.active]="currentView === 'home'" (click)="onViewChange('home')">Home</button>
+            <button class="nav-link px-2 fw-semibold" [class.active]="currentView === 'home'" (click)="onViewChange('home')">Home</button>
           </li>
           <li class="nav-item">
-            <button class="nav-link px-3 fw-semibold" [class.active]="currentView === 'daily'" (click)="onViewChange('daily')">Daily Records</button>
-          </li>
-          <li class="nav-item">
-            <button class="nav-link px-3 fw-semibold" [class.active]="currentView === 'analytics'" (click)="onViewChange('analytics')">Analytics</button>
+            <button class="nav-link px-2 fw-semibold" [class.active]="currentView === 'daily'" (click)="onViewChange('daily')">Daily Records</button>
           </li>
         </ul>
 
@@ -38,9 +35,6 @@
       }
       @if (currentView === 'daily') {
         <app-supervisor-daily></app-supervisor-daily>
-      }
-      @if (currentView === 'analytics') {
-        <app-supervisor-analytics></app-supervisor-analytics>
       }
     </div>
   </main>

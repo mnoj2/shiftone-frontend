@@ -12,6 +12,7 @@ body {
   color: var(--main-black);
   margin: 0 !important;
   padding: 0;
+  user-select: none;
 }
 
 .hot-toast-bar-base {

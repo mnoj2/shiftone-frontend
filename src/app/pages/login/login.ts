@@ -17,7 +17,6 @@ export class Login {
 
   email = '';
   password = '';
-  rememberMe = false;
   hidePassword = true;
   loading = false;
   errorMessage = '';
@@ -39,8 +38,8 @@ export class Login {
 
     this.auth.login({ Email: this.email, Password: this.password }).subscribe({
       next: (res) => {
-        this.tokenService.setToken(res.accessToken, this.rememberMe);
-        this.tokenService.setRefreshToken(res.refreshToken, this.rememberMe);
+        this.tokenService.setToken(res.accessToken);
+        this.tokenService.setRefreshToken(res.refreshToken);
 
         const decoded = this.tokenService.getDecodedToken(res.accessToken);
         let role = decoded?.['role'] ?? decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
@@ -55,9 +54,9 @@ export class Login {
 
         if (Array.isArray(role)) role = role[0];
 
-        this.tokenService.setItem('userId', id, this.rememberMe);
-        this.tokenService.setItem('role', role, this.rememberMe);
-        this.tokenService.setItem('userName', name, this.rememberMe);
+        this.tokenService.setItem('userId', id);
+        this.tokenService.setItem('role', role);
+        this.tokenService.setItem('userName', name);
 
         this.toast.success('Login successful! Redirecting...');
         this.loading = false;

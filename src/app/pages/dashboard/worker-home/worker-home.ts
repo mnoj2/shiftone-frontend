@@ -5,6 +5,7 @@ import { AttendanceService } from '../../../services/attendance.service';
 import { TokenService } from '../../../core/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { ErrorHandler } from '../../../utils/error-handler.util';
+import { ClockService } from '../../../core/clock.service';
 
 @Component({
   selector: 'app-worker-home',
@@ -24,20 +25,15 @@ export class WorkerHome implements OnInit, OnDestroy {
 
   shiftDurationRunning = '00:00:00';
   isWeekend = false;
-  clockHour = '00';
-  clockMinute = '00';
-  clockAmPm = '';
-  clockDay = '';
-  clockDate = '';
-  timeOfDay = 'Day';
   showModal = false;
 
-  private clockInterval: any;
+  private shiftInterval: any;
 
   constructor(
     private attendance: AttendanceService,
     private token: TokenService,
-    private toast: HotToastService
+    private toast: HotToastService,
+    public clock: ClockService
   ) {}
 
   ngOnInit(): void {
@@ -47,12 +43,12 @@ export class WorkerHome implements OnInit, OnDestroy {
     if (this.userId) this.loadTodayInfo();
 
     this.checkWeekend();
-    this.updateShiftStats();
-    this.clockInterval = setInterval(() => this.updateShiftStats(), 1000);
+    this.updateShiftDuration();
+    this.shiftInterval = setInterval(() => this.updateShiftDuration(), 1000);
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.clockInterval);
+    clearInterval(this.shiftInterval);
   }
 
   loadTodayInfo(): void {
@@ -75,36 +71,23 @@ export class WorkerHome implements OnInit, OnDestroy {
     this.isWeekend = day === 0 || day === 6;
   }
 
-  updateShiftStats(): void {
+  updateShiftDuration(): void {
+    if (this.data?.status !== 'SignedIn' || !this.data?.signInTime) return;
+
     const now = new Date();
-    const hours = now.getHours();
-    const twelveHour = hours % 12 || 12;
+    const signInTime = this.data.signInTime.endsWith('Z')
+      ? this.data.signInTime
+      : this.data.signInTime + 'Z';
 
-    this.clockHour = twelveHour.toString().padStart(2, '0');
-    this.clockMinute = now.getMinutes().toString().padStart(2, '0');
-    this.clockAmPm = hours >= 12 ? 'PM' : 'AM';
-    this.clockDay = now.toLocaleDateString('en-US', { weekday: 'short' }) + ',';
-    this.clockDate = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
+    let diffMs = Math.min(now.getTime() - new Date(signInTime).getTime(), EIGHT_HOURS_MS);
+    if (diffMs < 0) diffMs = 0;
 
-    if (hours < 12) this.timeOfDay = 'Morning';
-    else if (hours < 18) this.timeOfDay = 'Afternoon';
-    else this.timeOfDay = 'Evening';
-
-    if (this.data?.status === 'SignedIn' && this.data?.signInTime) {
-      const signInTime = this.data.signInTime.endsWith('Z')
-        ? this.data.signInTime
-        : this.data.signInTime + 'Z';
-
-      const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
-      let diffMs = Math.min(now.getTime() - new Date(signInTime).getTime(), EIGHT_HOURS_MS);
-      if (diffMs < 0) diffMs = 0;
-
-      const totalSeconds = Math.floor(diffMs / 1000);
-      const h = Math.floor(totalSeconds / 3600);
-      const m = Math.floor((totalSeconds % 3600) / 60);
-      const s = totalSeconds % 60;
-      this.shiftDurationRunning = [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
-    }
+    const totalSeconds = Math.floor(diffMs / 1000);
+    const h = Math.floor(totalSeconds / 3600);
+    const m = Math.floor((totalSeconds % 3600) / 60);
+    const s = totalSeconds % 60;
+    this.shiftDurationRunning = [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
   }
 
   onToggleShift(): void {

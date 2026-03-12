@@ -1,6 +1,18 @@
+.line {
+  height: 7px;
+  width: 85%;
+  background-color: black;
+}
+
 .input-group {
-  .form-control,
+  .form-control {
+    border-right: none;
+    border-color: #dee2e6;
+  }
+
   .btn {
-    border-color: #dee2e6; 
+    border: 1px solid #dee2e6;
+    border-left: none;
+    background: #fff;
   }
 }

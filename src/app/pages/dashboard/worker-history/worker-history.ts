@@ -152,7 +152,9 @@ export class WorkerHistory implements OnInit {
       : this.pendingRecord.signInTime + 'Z';
     const signInDate = new Date(signInTimeStr);
 
-    if (signOffDate <= signInDate) signOffDate.setDate(signOffDate.getDate() + 1);
+    if (signOffDate <= signInDate && h < 9) {
+      signOffDate.setDate(signOffDate.getDate() + 1);
+    }
 
     if (signOffDate <= signInDate) {
       this.toast.error('Sign-off time must be after sign-in time');

@@ -26,25 +26,46 @@ export class AdminComponent implements OnInit {
     { field: 'name', headerName: 'User Name' },
     { field: 'email', headerName: 'Email' },
     { field: 'phone', headerName: 'Phone', valueFormatter: p => p.value || 'N/A' },
-    { field: 'role', headerName: 'Role', cellClass: 'text-center' },
+    {
+      field: 'role',
+      headerName: 'Role',
+      cellClass: 'text-center',
+      cellRenderer: (params: any) => {
+        const cls = this.getRoleBadgeClass(params.value);
+        return `<span class="badge ${cls} px-3 py-2 rounded-4" style="font-size: 12px">${params.value}</span>`;
+      }
+    },
     {
       headerName: 'Actions',
       cellClass: 'd-flex align-items-center justify-content-center',
       pinned: 'right',
       width: 120,
-      cellRenderer: () => `
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-outline-primary border-0 rounded-circle edit-btn"
-            style="width:32px;height:32px;padding:0;" title="Edit User">
-            <i class="fa-solid fa-pencil"></i>
-          </button>
-          <button class="btn btn-sm btn-outline-danger border-0 rounded-circle delete-btn"
-            style="width:32px;height:32px;padding:0;" title="Delete User">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        </div>
-      `,
+      cellRenderer: (params: any) => {
+        const currentUserId = this.token.getItem('userId');
+        const isSelf = String(params.data.id) === String(currentUserId);
+
+        if (isSelf) {
+          return `<span class="text-muted small">—</span>`;
+        }
+
+        return `
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-primary border-0 rounded-circle edit-btn"
+              style="width:32px;height:32px;padding:0;" title="Edit User">
+              <i class="fa-solid fa-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-danger border-0 rounded-circle delete-btn"
+              style="width:32px;height:32px;padding:0;" title="Delete User">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </div>
+        `;
+      },
       onCellClicked: (params: any) => {
+        const currentUserId = this.token.getItem('userId');
+        const isSelf = String(params.data.id) === String(currentUserId);
+        if (isSelf) return;
+
         const target = params.event.target as HTMLElement;
         if (target.closest('.edit-btn')) this.editUser(params.data);
         else if (target.closest('.delete-btn')) this.confirmDelete(params.data);
@@ -195,5 +216,14 @@ export class AdminComponent implements OnInit {
   logout(): void {
     this.token.clearTokens();
     this.router.navigate(['/login']);
+  }
+
+  getRoleBadgeClass(role: string): string {
+    const map: Record<string, string> = {
+      Admin: 'bg-dark',
+      Supervisor: 'bg-secondary',
+      Worker: 'bg-light text-dark border'
+    };
+    return map[role] ?? 'bg-secondary';
   }
 }
