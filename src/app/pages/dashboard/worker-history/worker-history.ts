@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AttendanceService } from '../../../services/attendance.service';
+import { WorkerService } from '../../../services/worker.service';
 import { TokenService } from '../../../core/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ErrorHandler } from '../../../utils/error-handler.util';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { appGridTheme } from '../../../utils/ag-grid-theme';
@@ -20,7 +19,7 @@ export class WorkerHistory implements OnInit {
 
   isLoading = false;
   isError = false;
-  errorMessage = '';
+  errorMessage = 'An unexpected error occurred';
   workHistory: any[] = [];
 
   gridTheme = appGridTheme;
@@ -108,7 +107,7 @@ export class WorkerHistory implements OnInit {
   };
 
   constructor(
-    private attendance: AttendanceService,
+    private workerservice: WorkerService,
     private token: TokenService,
     private toast: HotToastService
   ) {}
@@ -119,14 +118,13 @@ export class WorkerHistory implements OnInit {
 
   loadWorkHistory(): void {
     this.isLoading = true;
-    this.attendance.getMyHistory().subscribe({
+    this.workerservice.getMyHistory().subscribe({
       next: (res) => {
         this.workHistory = res;
         this.isLoading = false;
       },
       error: (err) => {
         this.isError = true;
-        this.errorMessage = ErrorHandler.getErrorMessage(err);
         this.isLoading = false;
       }
     });
@@ -162,9 +160,7 @@ export class WorkerHistory implements OnInit {
       return;
     }
 
-    const request = this.pendingRecord.status === 'SignedIn'
-      ? this.attendance.manualSignOff(this.pendingRecord.date, signOffDate.toISOString())
-      : this.attendance.confirmAutoSignOff(this.pendingRecord.date, signOffDate.toISOString());
+    const request = this.workerservice.manualSignOff(this.pendingRecord.date, signOffDate.toISOString())
 
     request.subscribe({
       next: () => {
@@ -174,7 +170,7 @@ export class WorkerHistory implements OnInit {
         this.loadWorkHistory();
       },
       error: (err) => {
-        this.toast.error(ErrorHandler.getErrorMessage(err));
+        this.toast.error(this.errorMessage);
         this.isConfirming = false;
       }
     });

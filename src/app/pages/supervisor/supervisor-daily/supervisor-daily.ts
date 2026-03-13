@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AttendanceService } from '../../../services/attendance.service';
+import { SupervisorService } from '../../../services/supervisor.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ErrorHandler } from '../../../utils/error-handler.util';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { appGridTheme } from '../../../utils/ag-grid-theme';
@@ -83,7 +82,7 @@ export class SupervisorDaily implements OnInit {
   ];
 
   constructor(
-    private attendance: AttendanceService,
+    private supervisorservice: SupervisorService,
     private toast: HotToastService
   ) {}
 
@@ -98,14 +97,13 @@ export class SupervisorDaily implements OnInit {
     if (!this.dailyStart || !this.dailyEnd) return;
     this.isLoading = true;
     this.isError = false;
-    this.attendance.getByDateRange(this.dailyStart, this.dailyEnd).subscribe({
+    this.supervisorservice.getByDateRange(this.dailyStart, this.dailyEnd).subscribe({
       next: (res) => {
         this.records = res;
         this.isLoading = false;
       },
       error: (err) => {
         this.isError = true;
-        this.errorMessage = ErrorHandler.getErrorMessage(err);
         this.isLoading = false;
       }
     });

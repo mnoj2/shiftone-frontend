@@ -3,7 +3,6 @@ import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { TokenService } from '../../core/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ErrorHandler } from '../../utils/error-handler.util';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -17,9 +16,10 @@ export class Login {
 
   email = '';
   password = '';
+
   hidePassword = true;
   loading = false;
-  errorMessage = '';
+  errorMessage = 'An unexpected error occurred';
 
   emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?:\\.[a-zA-Z]{2,})?$';
 
@@ -36,7 +36,7 @@ export class Login {
 
     this.loading = true;
 
-    this.auth.login({ Email: this.email, Password: this.password }).subscribe({
+    this.auth.login({ email: this.email, password: this.password }).subscribe({
       next: (res) => {
         this.tokenService.setToken(res.accessToken);
         this.tokenService.setRefreshToken(res.refreshToken);
@@ -51,8 +51,6 @@ export class Login {
           this.toast.error('Invalid email or password.');
           return;
         }
-
-        if (Array.isArray(role)) role = role[0];
 
         this.tokenService.setItem('userId', id);
         this.tokenService.setItem('role', role);
@@ -77,7 +75,7 @@ export class Login {
         this.loading = false;
         this.errorMessage = (err.status === 401 || err.status === 400)
           ? 'Invalid email or password.'
-          : ErrorHandler.getErrorMessage(err);
+          : this.errorMessage;
         this.toast.error(this.errorMessage);
       }
     });

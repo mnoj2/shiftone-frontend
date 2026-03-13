@@ -214,8 +214,7 @@ export class AdminComponent implements OnInit {
   toggleEditPassword(): void { this.showEditPasswordState = !this.showEditPasswordState; }
 
   logout(): void {
-    this.token.clearTokens();
-    this.router.navigate(['/login']);
+    this.token.logout();
   }
 
   getRoleBadgeClass(role: string): string {

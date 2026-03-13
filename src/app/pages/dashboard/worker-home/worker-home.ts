@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AttendanceService } from '../../../services/attendance.service';
+import { WorkerService } from '../../../services/worker.service';
 import { TokenService } from '../../../core/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ErrorHandler } from '../../../utils/error-handler.util';
 import { ClockService } from '../../../core/clock.service';
 
 @Component({
@@ -21,7 +20,7 @@ export class WorkerHome implements OnInit, OnDestroy {
   userName = 'Worker';
   isLoading = false;
   isError = false;
-  errorMessage = '';
+  errorMessage = 'An unexpected error occurred';
 
   shiftDurationRunning = '00:00:00';
   isWeekend = false;
@@ -30,7 +29,7 @@ export class WorkerHome implements OnInit, OnDestroy {
   private shiftInterval: any;
 
   constructor(
-    private attendance: AttendanceService,
+    private workerservice: WorkerService,
     private token: TokenService,
     private toast: HotToastService,
     public clock: ClockService
@@ -53,14 +52,13 @@ export class WorkerHome implements OnInit, OnDestroy {
 
   loadTodayInfo(): void {
     this.isLoading = true;
-    this.attendance.getTodayAttendance().subscribe({
+    this.workerservice.getTodayAttendance().subscribe({
       next: (res) => {
         this.data = res;
         this.isLoading = false;
       },
       error: (err) => {
         this.isError = true;
-        this.errorMessage = ErrorHandler.getErrorMessage(err);
         this.isLoading = false;
       }
     });
@@ -103,7 +101,7 @@ export class WorkerHome implements OnInit, OnDestroy {
 
   signIn(): void {
     this.isLoading = true;
-    this.attendance.signIn().subscribe({
+    this.workerservice.signIn().subscribe({
       next: () => {
         this.isLoading = false;
         this.loadTodayInfo();
@@ -111,14 +109,14 @@ export class WorkerHome implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isLoading = false;
-        this.toast.error(ErrorHandler.getErrorMessage(err));
+        this.toast.error(this.errorMessage);
       }
     });
   }
 
   signOff(): void {
     this.isLoading = true;
-    this.attendance.signOff().subscribe({
+    this.workerservice.signOff().subscribe({
       next: () => {
         this.isLoading = false;
         this.loadTodayInfo();
@@ -126,7 +124,7 @@ export class WorkerHome implements OnInit, OnDestroy {
       },
       error: (err) => {
         this.isLoading = false;
-        this.toast.error(ErrorHandler.getErrorMessage(err));
+        this.toast.error(this.errorMessage);
       }
     });
   }

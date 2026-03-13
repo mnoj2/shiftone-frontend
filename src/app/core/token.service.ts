@@ -1,9 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable, Injector } from '@angular/core';
+import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TokenService {
+  
+  constructor(private injector: Injector, private router: Router) { }
 
   setToken(token: string): void {
     localStorage.setItem('accessToken', token);
@@ -63,6 +68,20 @@ export class TokenService {
     const payload = this.getDecodedToken(token);
     if (!payload) return true;
     return Date.now() > payload.exp * 1000;
+  }
+
+  async logout(): Promise<void> {
+    const authService = this.injector.get(AuthService);
+    const refreshToken = this.getRefreshToken();
+    if (refreshToken) {
+      try {
+        await firstValueFrom(authService.revokeToken(refreshToken));
+      } catch (e) {
+        console.error('Logout revocation failed', e);
+      }
+    }
+    this.clearTokens();
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {

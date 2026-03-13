@@ -26,7 +26,6 @@ export class Dashboard {
   }
 
   logout(): void {
-    this.token.clearTokens();
-    this.router.navigate(['/login']);
+    this.token.logout();
   }
 }

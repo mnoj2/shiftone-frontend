@@ -1,9 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AttendanceService } from '../../../services/attendance.service';
+import { SupervisorService } from '../../../services/supervisor.service';
 import { TokenService } from '../../../core/token.service';
-import { ErrorHandler } from '../../../utils/error-handler.util';
 import { ClockService } from '../../../core/clock.service';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartComponent } from 'highcharts-angular';
@@ -20,7 +19,7 @@ export class SupervisorHome implements OnInit {
   userName = 'Supervisor';
   isLoading = false;
   isError = false;
-  errorMessage = '';
+  errorMessage = 'An unexpected error occurred';
 
   // --- Home ---
   homeData: any = null;
@@ -44,7 +43,7 @@ export class SupervisorHome implements OnInit {
   @ViewChild('dateInput') dateInput!: ElementRef;
 
   constructor(
-    private attendance: AttendanceService,
+    private supervisorservice: SupervisorService,
     private token: TokenService,
     public clock: ClockService
   ) {}
@@ -65,14 +64,13 @@ export class SupervisorHome implements OnInit {
     this.selectedHomeDate = date;
     this.isLoading = true;
     this.isError = false;
-    this.attendance.getSupervisorHomeSummary(date).subscribe({
+    this.supervisorservice.getSupervisorHomeSummary(date).subscribe({
       next: (res) => {
         this.homeData = res;
         this.isLoading = false;
       },
       error: (err) => {
         this.isError = true;
-        this.errorMessage = ErrorHandler.getErrorMessage(err);
         this.isLoading = false;
       }
     });
@@ -108,7 +106,7 @@ export class SupervisorHome implements OnInit {
 
   loadAnalytics(): void {
     this.analyticsLoading = true;
-    this.attendance.getAnalytics(this.selectedMonth, this.selectedYear).subscribe({
+    this.supervisorservice.getAnalytics(this.selectedMonth, this.selectedYear).subscribe({
       next: (res) => {
         this.analyticsData = res;
         this.hasMonthlyData = res?.monthlyHours?.length > 0;
@@ -116,7 +114,6 @@ export class SupervisorHome implements OnInit {
         if (this.hasMonthlyData) this.renderMonthlyChart(res.monthlyHours);
       },
       error: (err) => {
-        this.errorMessage = ErrorHandler.getErrorMessage(err);
         this.analyticsLoading = false;
       }
     });

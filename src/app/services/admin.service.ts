@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { UserDto, CreateUserDto, UpdateUserDto } from '../core/models/user.models';
 
 @Injectable({
     providedIn: 'root'
@@ -11,11 +12,12 @@ export class AdminService {
 
     constructor(private http: HttpClient) { }
 
-    getAllUsers(): Observable<any[]> {
-        return this.http.get<any[]>(`${this.apiUrl}/users`);
+    
+    getAllUsers(): Observable<UserDto[]> {
+        return this.http.get<UserDto[]>(`${this.apiUrl}/users`);
     }
 
-    updateUserDetails(userId: number, details: any): Observable<any> {
+    updateUserDetails(userId: number, details: UpdateUserDto): Observable<any> {
         return this.http.put(`${this.apiUrl}/users/${userId}`, details);
     }
 
@@ -23,7 +25,7 @@ export class AdminService {
         return this.http.delete(`${this.apiUrl}/users/${userId}`);
     }
 
-    createUser(userData: any): Observable<any> {
+    createUser(userData: CreateUserDto): Observable<any> {
         return this.http.post(`${this.apiUrl}/users`, userData);
     }
 }

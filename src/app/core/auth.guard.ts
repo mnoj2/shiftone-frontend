@@ -9,20 +9,17 @@ export const authGuard: CanActivateFn = (route) => {
   const token = tokenService.getToken();
   const requiredRole = route.data['role'];
 
-  // 1. Basic Auth Check
   if (!token || tokenService.isTokenExpired(token)) {
     router.navigate(['/login']);
     return false;
   }
 
-  // 2. Role-Based Check
   if (requiredRole) {
     const userRole = tokenService.getRole();
 
     const roleMatches = userRole && userRole.toLowerCase().trim() === requiredRole.toLowerCase().trim();
 
     if (!roleMatches) {
-      // Redirect based on role to be helpful
       if (userRole?.toLowerCase() === 'admin') router.navigate(['/admin']);
       else if (userRole?.toLowerCase() === 'supervisor') router.navigate(['/supervisor']);
       else if (userRole?.toLowerCase() === 'worker') router.navigate(['/dashboard']);
