@@ -17,15 +17,15 @@ export class AdminService {
         return this.http.get<UserDto[]>(`${this.apiUrl}/users`);
     }
 
+    createUser(userData: CreateUserDto): Observable<any> {
+        return this.http.post(`${this.apiUrl}/users`, userData);
+    }
+
     updateUserDetails(userId: number, details: UpdateUserDto): Observable<any> {
         return this.http.put(`${this.apiUrl}/users/${userId}`, details);
     }
 
     deleteUser(userId: number): Observable<any> {
         return this.http.delete(`${this.apiUrl}/users/${userId}`);
-    }
-
-    createUser(userData: CreateUserDto): Observable<any> {
-        return this.http.post(`${this.apiUrl}/users`, userData);
     }
 }

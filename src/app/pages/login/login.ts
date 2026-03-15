@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../core/auth.service';
-import { TokenService } from '../../core/token.service';
+import { AuthService } from '../../core/services/auth.service'; 
+import { TokenService } from '../../core/services/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormsModule, NgForm } from '@angular/forms';
 import { CommonModule } from '@angular/common';

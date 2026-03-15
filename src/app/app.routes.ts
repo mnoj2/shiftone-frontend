@@ -3,8 +3,8 @@ import { Login } from './pages/login/login';
 import { Dashboard } from './pages/dashboard/dashboard';
 import { Supervisor } from './pages/supervisor/supervisor';
 import { AdminComponent } from './pages/admin/admin';
-import { authGuard } from './core/auth.guard';
-import { loginGuard } from './core/login.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { loginGuard } from './core/guards/login.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },

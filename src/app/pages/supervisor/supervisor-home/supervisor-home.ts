@@ -2,8 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupervisorService } from '../../../services/supervisor.service';
-import { TokenService } from '../../../core/token.service';
-import { ClockService } from '../../../core/clock.service';
+import { TokenService } from '../../../core/services/token.service';
+import { ClockService } from '../../../core/services/clock.service';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartComponent } from 'highcharts-angular';
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TokenService } from '../../core/token.service';
+import { TokenService } from '../../core/services/token.service';
 import { WorkerHome } from './worker-home/worker-home';
 import { WorkerHistory } from './worker-history/worker-history';
 

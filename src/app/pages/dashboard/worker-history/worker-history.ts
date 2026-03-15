@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { WorkerService } from '../../../services/worker.service';
-import { TokenService } from '../../../core/token.service';
+import { TokenService } from '../../../core/services/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';

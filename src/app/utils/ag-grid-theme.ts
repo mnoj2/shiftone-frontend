@@ -1,7 +1,6 @@
 import { themeQuartz } from 'ag-grid-community';
 
 export const appGridTheme = themeQuartz.withParams({
-    fontFamily: 'Poppins, sans-serif',
     fontSize: 14,
     headerFontSize: 13,
     headerFontWeight: 700,

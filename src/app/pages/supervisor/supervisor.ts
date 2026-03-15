@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { TokenService } from '../../core/token.service';
+import { TokenService } from '../../core/services/token.service';
 import { SupervisorHome } from './supervisor-home/supervisor-home';
 import { SupervisorDaily } from './supervisor-daily/supervisor-daily';
 
