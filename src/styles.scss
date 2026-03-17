@@ -3,16 +3,29 @@
 :root {
   --main-black: #212529;
   --main-white: #ffffff;
-  --ag-font-family: 'Raleway', sans-serif;
+  --ag-font-family: 'Outfit', sans-serif;
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Outfit', sans-serif;
   background-color: #f8f9fa;
   color: var(--main-black);
   margin: 0;
   padding: 0;
   user-select: none;
+}
+
+.input-group {
+  .form-control {
+    border-right: none;
+    border-color: #dee2e6;
+  }
+
+  .btn {
+    border: 1px solid #dee2e6;
+    border-left: none;
+    background: #fff;
+  }
 }
 
 .hot-toast-bar-base {
@@ -28,4 +41,64 @@ body {
   color: #fff !important;
 }
 
+// admin.scss
 
+.role-pill {
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: 50rem;
+  font-weight: 500;
+
+  &.role-worker {
+    background-color: #e2e3e5;
+    color: #41464b;
+  }
+
+  &.role-supervisor {
+    background-color: #d1ecf1;
+    color: #0c5460;
+  }
+
+  &.role-admin {
+    background-color: #d4edda;
+    color: #155724;
+  }
+}
+
+.edit-btn,
+.delete-btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.edit-btn:hover {
+  background-color: #cfe2ff !important;
+  color: #0d6efd !important;
+}
+
+.delete-btn:hover {
+  background-color: #f8d7da !important;
+  color: #dc3545 !important;
+}
+
+
+.navbar-brand {
+  letter-spacing: 1px;
+}
+
+.nav .nav-link {
+  color: #212529;
+  border-bottom: 3px solid transparent;
+  border-radius: 0;
+  padding-bottom: 3px;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-bottom-color: #6c757d;
+  }
+
+  &.active {
+    color: #212529;
+    border-bottom-color: #212529;
+    background: none;
+  }
+}

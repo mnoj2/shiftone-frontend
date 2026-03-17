@@ -6,7 +6,7 @@ import { HotToastService } from '@ngneat/hot-toast';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef } from 'ag-grid-community';
 import { appGridTheme } from '../../../utils/ag-grid-theme';
-import * as XLSX from 'xlsx';
+import 'ag-grid-enterprise';
 
 @Component({
   selector: 'app-supervisor-daily',
@@ -26,6 +26,7 @@ export class SupervisorDaily implements OnInit {
   dailyEnd = '';
 
   gridTheme = appGridTheme;
+  private gridApi: any;
 
   defaultColDef: ColDef = {
     flex: 1,
@@ -64,6 +65,7 @@ export class SupervisorDaily implements OnInit {
       field: 'status',
       headerName: 'Status',
       cellClass: 'text-center',
+      valueFormatter: p => p.value || '-',
       cellRenderer: (params: any) => {
         const badgeClass: Record<string, string> = {
           'SignedIn': 'signed-in',
@@ -93,6 +95,11 @@ export class SupervisorDaily implements OnInit {
     this.filterDaily();
   }
 
+  onGridReady(params: any): void {
+    this.gridApi = params.api;
+    this.gridApi.sizeColumnsToFit();
+  }
+
   filterDaily(): void {
     if (!this.dailyStart || !this.dailyEnd) return;
     this.isLoading = true;
@@ -104,6 +111,7 @@ export class SupervisorDaily implements OnInit {
       },
       error: (err) => {
         this.isError = true;
+        this.errorMessage = err.error?.message || 'Failed to load records';
         this.isLoading = false;
       }
     });
@@ -114,24 +122,10 @@ export class SupervisorDaily implements OnInit {
       this.toast.error('No data to export');
       return;
     }
-
-    const exportData = this.records.map(r => ({
-      Date: new Date(r.date).toLocaleDateString('en-IN'),
-      WorkerName: r.workerName || r.name,
-      StartTime: this.formatTime(r.signInTime),
-      EndTime: this.formatTime(r.signOffTime),
-      Status: r.status,
-      TotalHours: this.formatHours(r.totalHours)
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(exportData);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Attendance Report');
-    XLSX.writeFile(wb, 'Attendance_Report.xlsx');
-  }
-
-  onGridReady(params: any): void {
-    params.api.sizeColumnsToFit();
+    this.gridApi.exportDataAsExcel({
+      fileName: 'Attendance_Report.xlsx',
+      sheetName: 'Attendance Report'
+    });
   }
 
   formatTime(time: string | null): string {
@@ -145,10 +139,12 @@ export class SupervisorDaily implements OnInit {
     });
   }
 
-  formatHours(hrs: number | null): string {
-    if (!hrs || hrs <= 0) return '-';
-    const h = Math.floor(hrs);
-    const m = Math.round((hrs - h) * 60);
+  formatHours(hours: number | null): string {
+    if (!hours || hours <= 0) return '-';
+    let h = Math.floor(hours);
+    let m = Math.round((hours - h) * 60);
+    if (m === 60) { h += 1; m = 0; }
+    if (h > 0 && m === 0) return `${h} hr`;
     return h > 0 ? `${h} hr ${m} min` : `${m} min`;
   }
 }

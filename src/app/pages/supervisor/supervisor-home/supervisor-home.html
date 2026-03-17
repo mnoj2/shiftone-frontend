@@ -1,16 +1,6 @@
 <div class="container-fluid px-4 py-4">
 
-  <header class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 mt-2 gap-3">
-    <div class="text-center text-md-start">
-      <h2 class="h3 fw-bold mb-0">Good {{ clock.timeOfDay }}, {{ userName.split(' ')[0] }}</h2>
-    </div>
-    <div class="text-end">
-      <div class="h4 fw-bold mb-0">{{ clock.clockHour }}:{{ clock.clockMinute }} {{ clock.clockAmPm }}</div>
-      <div class="small text-muted">{{ clock.clockDay }} {{ clock.clockDate }}</div>
-    </div>
-  </header>
-
-  <div class="row g-4 align-items-center">
+  <div class="row g-4 mt-3 align-items-center">
 
     <!-- Left: Overview Card -->
     <div class="col-lg-4">
@@ -29,7 +19,7 @@
             </div>
           } @else {
 
-            <div class="d-flex justify-content-between align-items-center p-4 bg-dark text-white">
+            <div class="d-flex justify-content-between align-items-center p-4">
               <h4 class="h5 fw-bold mb-0">{{ getHomeDisplayDate() }}</h4>
               <div class="d-flex gap-2">
                 @if (selectedHomeDate) {
@@ -53,19 +43,19 @@
             <div class="list-group list-group-flush">
               <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
                 <span class="text-muted fw-semibold">Total Workers</span>
-                <span class="badge bg-dark px-3 py-2 fw-bold rounded-5">{{ homeData?.totalWorkers || '-' }}</span>
+                <span class="text-dark px-3 py-2 fw-bold ">{{ homeData?.totalWorkers || '-' }}</span>
               </div>
               <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
                 <span class="text-muted fw-semibold">Shifts Completed</span>
-                <span class="badge bg-secondary px-3 py-2 fw-bold rounded-5">{{ homeData?.completedShifts ?? '-' }}</span>
+                <span class="text-dark px-3 py-2 fw-bold ">{{ homeData?.completedShifts ?? '-' }}</span>
               </div>
               <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
                 <span class="text-muted fw-semibold">Active on Duty</span>
-                <span class="badge bg-secondary px-3 py-2 fw-bold rounded-5">{{ homeData?.inProgressShifts ?? '-' }}</span>
+                <span class="text-dark px-3 py-2 fw-bold">{{ homeData?.inProgressShifts ?? '-' }}</span>
               </div>
               <div class="list-group-item d-flex justify-content-between align-items-center p-3 px-4">
                 <span class="text-muted fw-semibold">Pending Sign-in</span>
-                <span class="badge bg-secondary px-3 py-2 fw-bold rounded-5">
+                <span class="text-dark px-3 py-2 fw-bold">
                   {{ (homeData?.totalWorkers || 0) - ((homeData?.completedShifts || 0) + (homeData?.inProgressShifts || 0)) }}
                 </span>
               </div>

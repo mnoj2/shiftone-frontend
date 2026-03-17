@@ -36,6 +36,7 @@
     "@ngneat/overview": "^7.0.0",
     "ag-grid-angular": "^35.1.0",
     "ag-grid-community": "^35.1.0",
+    "ag-grid-enterprise": "^35.1.0",
     "axios": "^1.13.1",
     "bootstrap": "^5.3.8",
     "highcharts": "^12.5.0",

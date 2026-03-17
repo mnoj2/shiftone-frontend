@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { TokenService } from '../../core/services/token.service';
 import { SupervisorHome } from './supervisor-home/supervisor-home';
 import { SupervisorDaily } from './supervisor-daily/supervisor-daily';
@@ -12,14 +11,19 @@ import { SupervisorDaily } from './supervisor-daily/supervisor-daily';
   templateUrl: './supervisor.html',
   styleUrls: ['./supervisor.scss']
 })
-export class Supervisor {
+export class Supervisor implements OnInit  {
 
   currentView: 'home' | 'daily' | 'analytics' = 'home';
+  userName = '';
 
   constructor(
-    private router: Router,
     private token: TokenService
   ) {}
+
+  ngOnInit(): void {
+    this.userName = this.token.getItem('userName') ?? '';
+  }
+
 
   onViewChange(view: 'home' | 'daily' | 'analytics'): void {
     this.currentView = view;

@@ -1,38 +1,3 @@
-// admin.component.scss
 .navbar-brand {
   letter-spacing: 1px;
-}
-
-.input-group {
-  .form-control {
-    border-right: none;
-    border-color: #dee2e6;
-  }
-
-  .btn {
-    border: 1px solid #dee2e6;
-    border-left: none;
-    background: #fff;
-  }
-}
-
-:host ::ng-deep {
-  .edit-btn,
-  .delete-btn {
-    transition: all 0.2s ease-in-out;
-  }
-
-  .edit-btn:hover {
-    background-color: #cfe2ff  !important;
-    color: #0d6efd !important;
-  }
-
-  .delete-btn:hover {
-    background-color: #f8d7da !important;
-    color: #dc3545 !important;
-  }
-}
-
-.form-control.is-invalid {
-  background-image: none;
 }

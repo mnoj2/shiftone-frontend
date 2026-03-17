@@ -1,10 +1,16 @@
 <div class="min-vh-100 bg-light d-flex flex-column">
-
+  
   <nav class="navbar navbar-expand-lg pt-3">
     <div class="container">
-      <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-        <span class="fs-2">ShiftOne</span>
-        <span class="badge bg-secondary ms-2 small" style="font-size: 0.6rem; letter-spacing: 0.05em;">WORKER</span>
+
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+        <div class="d-flex flex-column">
+          <span class="fs-2 lh-1">ShiftOne</span>
+          <div class="d-flex align-items-center gap-1 mt-1">
+            <span class="text-muted fw-normal fs-6">{{ userName }}</span>
+            <span class="badge bg-secondary" style="font-size: 0.6rem; letter-spacing: 0.05em;">WORKER</span>
+          </div>
+        </div>
       </a>
 
       <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
@@ -25,15 +31,16 @@
           Logout
         </button>
       </div>
+      
     </div>
   </nav>
 
-  <main class="flex-grow-1 pt-3">
-    <div class="container">
+  <main class="pt-3">
+    <div class="container-fluid">
       @if (currentView === 'home') {
         <app-worker-home></app-worker-home>
       }
-      @if (currentView === 'history') {
+      @else if (currentView === 'history') {
         <app-worker-history></app-worker-history>
       }
     </div>

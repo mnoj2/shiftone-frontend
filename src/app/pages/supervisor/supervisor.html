@@ -2,12 +2,17 @@
 
   <nav class="navbar navbar-expand-lg pt-3">
     <div class="container">
-      <a class="navbar-brand fw-bold d-flex align-items-center" href="#">
-        <span class="fs-2">ShiftOne</span>
-        <span class="badge bg-secondary ms-2 small" style="font-size: 0.6rem; letter-spacing: 0.05em;">SUPERVISOR</span>
+      <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
+        <div class="d-flex flex-column">
+          <span class="fs-2 lh-1">ShiftOne</span>
+          <div class="d-flex align-items-center gap-1 mt-1">
+            <span class="text-muted fw-normal fs-6">{{ userName }}</span>
+            <span class="badge bg-secondary" style="font-size: 0.6rem; letter-spacing: 0.05em;">SUPERVISOR</span>
+          </div>
+        </div>
       </a>
 
-      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#supervisorNavbar">
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
         <span class="navbar-toggler-icon"></span>
       </button>
 

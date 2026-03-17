@@ -1,13 +1,5 @@
 <div class="container py-5">
 
-  <header class="d-flex justify-content-between align-items-center mb-2">
-    <h2 class="h3 fw-bold mb-0">Good {{ clock.timeOfDay }}, {{ userName.split(' ')[0] }}</h2>
-    <div class="text-end">
-      <div class="h4 fw-bold mb-0">{{ clock.clockHour }}:{{ clock.clockMinute }} {{ clock.clockAmPm }}</div>
-      <div class="small text-muted">{{ clock.clockDay }} {{ clock.clockDate }}</div>
-    </div>
-  </header>
-
   <div class="row g-5 w-75 m-auto mt-4 mb-4">
 
     <!-- Shift Status Card -->
@@ -68,7 +60,7 @@
 
   <!-- Actions -->
   <div class="text-center mt-5">
-    <button class="btn btn-dark btn-lg px-5 py-3 fw-bold w-75 mt-4"
+    <button class="btn btn-dark rounded-5 btn-lg px-5 py-3 fw-bold w-75 mt-4"
       style="max-width: 300px;"
       (click)="onToggleShift()"
       [disabled]="(isWeekend && data?.status !== 'SignedIn') || data?.status === 'SignedOff' || isLoading">
@@ -79,9 +71,9 @@
     </button>
 
     @if (isWeekend && data?.status !== 'SignedIn') {
-      <div class="mt-2 text-muted small fw-semibold">Shift disabled on weekends.</div>
-    } @else if (data?.status === 'SignedOff' || data?.status === 'AutoSignedOff') {
-      <div class="mt-2 text-muted small fw-semibold">Shift completed.</div>
+      <div class="mt-2 text-muted small fw-semibold">Shift disabled on weekends</div>
+    } @else if (data?.status === 'SignedOff') {
+      <div class="mt-2 text-muted small fw-semibold">Shift completed</div>
     }
   </div>
 

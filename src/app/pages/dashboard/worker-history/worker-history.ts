@@ -24,7 +24,7 @@ export class WorkerHistory implements OnInit {
 
   gridTheme = appGridTheme;
 
-  showAutoSignOffModal = false;
+  showSignOffModal = false;
   pendingRecord: any = null;
   pendingSignOffTimeInput = '';
   isConfirming = false;
@@ -76,11 +76,9 @@ export class WorkerHistory implements OnInit {
       filter: false,
       resizable: false,
       cellRenderer: (params: any) => {
-        const status = params.value;
-        const isWorker = this.token.getRole() === 'Worker';
         const isToday = new Date(params.data.date).toDateString() === new Date().toDateString();
 
-        if (params.data.status === 'SignedIn' && isWorker && !isToday) {
+        if (params.data.status === 'SignedIn' && !isToday) {
           return `
             <button class="btn btn-sm btn-dark py-0 px-2 fw-bold manual-signoff-btn"
               style="font-size: 0.7rem; height: 24px;">SIGN OFF</button>
@@ -133,10 +131,10 @@ export class WorkerHistory implements OnInit {
   openManualSignOffModal(record: any): void {
     this.pendingRecord = record;
     this.pendingSignOffTimeInput = '';
-    this.showAutoSignOffModal = true;
+    this.showSignOffModal = true;
   }
 
-  onConfirmAutoSignOff(): void {
+  onConfirmSignOff(): void {
     if (!this.pendingSignOffTimeInput || !this.pendingRecord) return;
 
     this.isConfirming = true;
@@ -150,26 +148,26 @@ export class WorkerHistory implements OnInit {
       : this.pendingRecord.signInTime + 'Z';
     const signInDate = new Date(signInTimeStr);
 
-    if (signOffDate <= signInDate && h < 9) {
+    if (signOffDate <= signInDate) {
       signOffDate.setDate(signOffDate.getDate() + 1);
     }
 
-    if (signOffDate <= signInDate) {
-      this.toast.error('Sign-off time must be after sign-in time');
+    const diffMs = signOffDate.getTime() - signInDate.getTime();
+
+    if (diffMs <= 0 || diffMs > 12 * 60 * 60 * 1000) {
+      this.toast.error('Please enter a valid sign-off time within 12 hours of sign-in');
       this.isConfirming = false;
       return;
     }
 
-    const request = this.workerservice.manualSignOff(this.pendingRecord.date, signOffDate.toISOString())
-
-    request.subscribe({
+    this.workerservice.manualSignOff(this.pendingRecord.date, signOffDate.toISOString()).subscribe({
       next: () => {
         this.toast.success('Sign-off successful');
         this.isConfirming = false;
-        this.showAutoSignOffModal = false;
+        this.showSignOffModal = false;
         this.loadWorkHistory();
       },
-      error: (err) => {
+      error: () => {
         this.toast.error(this.errorMessage);
         this.isConfirming = false;
       }
@@ -193,8 +191,13 @@ export class WorkerHistory implements OnInit {
 
   formatHours(hours: number | null): string {
     if (!hours || hours <= 0) return '-';
-    const h = Math.floor(hours);
-    const m = Math.round((hours - h) * 60);
+    let h = Math.floor(hours);
+    let m = Math.round((hours - h) * 60);
+    if (m === 60) {
+      h += 1;
+      m = 0;
+    }
+    if(h > 0 && m === 0) return `${h} hr`;
     return h > 0 ? `${h} hr ${m} min` : `${m} min`;
   }
 }

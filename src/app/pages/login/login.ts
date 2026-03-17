@@ -19,9 +19,9 @@ export class Login {
 
   hidePassword = true;
   loading = false;
-  errorMessage = 'An unexpected error occurred';
+  errorMessage = '';
 
-  emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(?:\\.[a-zA-Z]{2,})?$';
+  emailPattern = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$';
 
   constructor(
     private auth: AuthService,
@@ -46,12 +46,6 @@ export class Login {
         const id = decoded?.['id'];
         const name = decoded?.['name'] ?? decoded?.['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'];
 
-        if (!role || !id) {
-          this.loading = false;
-          this.toast.error('Invalid email or password.');
-          return;
-        }
-
         this.tokenService.setItem('userId', id);
         this.tokenService.setItem('role', role);
         this.tokenService.setItem('userName', name);
@@ -66,16 +60,14 @@ export class Login {
               supervisor: '/supervisor',
               worker: '/dashboard'
             };
-            const path = routes[String(role).trim().toLowerCase()] ?? '/login';
+            const path = routes[String(role).trim().toLowerCase()];
             this.router.navigate([path]);
           });
         }, 1000);
       },
       error: (err) => {
         this.loading = false;
-        this.errorMessage = (err.status === 401 || err.status === 400)
-          ? 'Invalid email or password.'
-          : this.errorMessage;
+        this.errorMessage = (err.status === 401) ? 'Invalid email or password.' : 'An unexpected error occurred';
         this.toast.error(this.errorMessage);
       }
     });

@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 import { TokenService } from '../../core/services/token.service';
 import { WorkerHome } from './worker-home/worker-home';
 import { WorkerHistory } from './worker-history/worker-history';
@@ -12,14 +11,18 @@ import { WorkerHistory } from './worker-history/worker-history';
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.scss']
 })
-export class Dashboard {
+export class Dashboard implements OnInit {
 
   currentView: 'home' | 'history' = 'home';
+  userName = '';
 
   constructor(
-    private router: Router,
     private token: TokenService
   ) {}
+
+  ngOnInit(): void {
+    this.userName = this.token.getItem('userName') ?? '';
+  }
 
   onViewChange(view: 'home' | 'history'): void {
     this.currentView = view;
