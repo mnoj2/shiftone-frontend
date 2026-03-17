@@ -34,6 +34,7 @@ export class WorkerHome implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loadTodayInfo();
+    this.checkUnfinishedRecords(); 
     this.checkWeekend();
     this.updateShiftDuration();
 
@@ -115,6 +116,21 @@ export class WorkerHome implements OnInit, OnDestroy {
         this.isLoading = false;
         this.toast.error(this.errorMessage);
       }
+    });
+  }
+
+  checkUnfinishedRecords(): void {
+    this.workerservice.getMyHistory().subscribe({
+      next: (res) => {
+        const today = new Date().toDateString();
+        const hasUnfinished = res.some((r: any) =>
+          r.status === 'SignedIn' &&
+          new Date(r.date).toDateString() !== today
+        );
+        if (hasUnfinished) {
+          this.toast.warning('You have unfinished sign-off records');
+        }
+      },
     });
   }
 

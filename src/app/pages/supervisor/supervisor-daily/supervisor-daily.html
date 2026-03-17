@@ -7,11 +7,11 @@
           <div class="row g-2 align-items-end">
             <div class="col-sm-3 col-3 me-2">
               <label class="form-label fw-semibold small text-muted mb-1">Start Date</label>
-              <input type="date" class="form-control" [(ngModel)]="dailyStart">
+              <input type="date" class="form-control" [(ngModel)]="dailyStart" [max]="today">
             </div>
             <div class="col-sm-3 col-3">
               <label class="form-label fw-semibold small text-muted mb-1">End Date</label>
-              <input type="date" class="form-control" [(ngModel)]="dailyEnd">
+              <input type="date" class="form-control" [(ngModel)]="dailyEnd" [max]="today">
             </div>
             <div class="col-sm-2 ms-3 col-12 mt-3 mt-sm-0">
               <button class="btn btn-dark w-100 fw-bold" (click)="filterDaily()">
@@ -39,7 +39,7 @@
       } @else if (records.length === 0) {
         <div class="text-center py-5 border rounded bg-white">
           <i class="fa-solid fa-magnifying-glass fa-2x text-muted mb-3 opacity-25"></i>
-          <p class="text-muted mb-0">No records found for selected period.</p>
+          <p class="text-muted mb-0">No records found for <b>{{ formatDate(dailyStart) }} - {{ formatDate(dailyEnd) }}</b></p>
         </div>
       } @else {
         <ag-grid-angular

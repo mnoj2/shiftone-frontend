@@ -22,6 +22,7 @@ export class SupervisorDaily implements OnInit {
   errorMessage = '';
   records: any[] = [];
 
+  today = ''
   dailyStart = '';
   dailyEnd = '';
 
@@ -89,9 +90,9 @@ export class SupervisorDaily implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const today = new Date().toISOString().split('T')[0];
-    this.dailyStart = today;
-    this.dailyEnd = today;
+    this.today = new Date().toISOString().split('T')[0];
+    this.dailyStart = this.today;
+    this.dailyEnd = this.today;
     this.filterDaily();
   }
 
@@ -102,6 +103,12 @@ export class SupervisorDaily implements OnInit {
 
   filterDaily(): void {
     if (!this.dailyStart || !this.dailyEnd) return;
+
+    if (new Date(this.dailyStart) > new Date(this.dailyEnd)) {
+      this.toast.error('Start date must be before end date');
+      return;
+    }
+
     this.isLoading = true;
     this.isError = false;
     this.supervisorservice.getByDateRange(this.dailyStart, this.dailyEnd).subscribe({
@@ -146,5 +153,9 @@ export class SupervisorDaily implements OnInit {
     if (m === 60) { h += 1; m = 0; }
     if (h > 0 && m === 0) return `${h} hr`;
     return h > 0 ? `${h} hr ${m} min` : `${m} min`;
+  }
+
+  formatDate(date: string) {
+    return new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
   }
 }

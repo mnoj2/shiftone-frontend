@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHotToastConfig({
       position: 'top-right',
-      duration: 3000
+      duration: 2000
     })
   ]
 };
