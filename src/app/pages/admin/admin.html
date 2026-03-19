@@ -2,6 +2,7 @@
 
   <nav class="navbar navbar-expand-lg pt-3">
     <div class="container">
+
       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
         <div class="d-flex flex-column">
           <span class="fs-2 lh-1">ShiftOne</span>
@@ -11,276 +12,46 @@
           </div>
         </div>
       </a>
-      <button class="btn btn-outline-dark fw-bold ms-auto" (click)="logout()">
-        Logout
+
+      <button class="navbar-toggler border-0" type="button"
+        data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
       </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="nav mx-auto mt-3 mt-lg-0 d-flex gap-3">
+          <li class="nav-item">
+            <button class="nav-link px-2 fw-semibold"
+              [class.active]="currentView === 'home'"
+              (click)="onViewChange('home')">
+              User Management
+            </button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link px-2 fw-semibold"
+              [class.active]="currentView === 'enroll'"
+              (click)="onViewChange('enroll')">
+              Quick Enroll
+            </button>
+          </li>
+        </ul>
+
+        <button class="btn btn-outline-dark fw-bold mt-3 mt-lg-0" (click)="logout()">
+          Logout
+        </button>
+      </div>
+
     </div>
   </nav>
 
-  <main class="flex-grow-1 pt-3 w-75 mx-auto">
+  <main class="flex-grow-1 pt-3">
     <div class="container">
-      <div class="card border-0 shadow-sm">
-        <div class="card-body p-4">
-
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="h4 fw-bold mb-0">User Management</h2>
-            <button class="btn btn-dark fw-bold" (click)="openAddModal()">
-              <i class="fa-solid fa-plus me-2"></i>Add User
-            </button>
-          </div>
-
-          @if (isLoading) {
-            <div class="text-center py-5">
-              <div class="spinner-border text-dark mb-3" role="status"></div>
-              <p class="text-muted">Loading users...</p>
-            </div>
-          } @else if (users.length === 0) {
-            <div class="text-center py-5 border rounded bg-white">
-              <i class="fa-solid fa-user-slash fa-3x text-muted mb-3 opacity-25"></i>
-              <p class="text-muted mb-0">No users found.</p>
-            </div>
-          } @else {
-            <div >
-              <ag-grid-angular
-                style="width: 100%; padding: 5px 20px;"
-                [rowData]="users"
-                [columnDefs]="columnDefs"
-                [defaultColDef]="defaultColDef"
-                [animateRows]="true"
-                [pagination]="true"
-                [paginationPageSizeSelector]="false"
-                [paginationPageSize]="8"
-                [domLayout]="'autoHeight'"
-                [theme]="gridTheme"
-                (gridReady)="onGridReady($event)">
-              </ag-grid-angular>
-            </div>
-          }
-
-        </div>
-      </div>
+      @if (currentView === 'home') {
+        <app-admin-home></app-admin-home>
+      } @else if (currentView === 'enroll') {
+        <app-quick-enroll></app-quick-enroll>
+      }
     </div>
   </main>
-
-
-  <!-- Add User Modal -->
-  @if (showAddModal) {
-  <div class="modal d-block" style="background: rgba(0,0,0,0.5)" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow-lg">
-
-        <div class="modal-header border-bottom-0 p-4 pb-0">
-          <h5 class="modal-title fw-bold">Create New User</h5>
-          <button type="button" class="btn-close" (click)="closeAddModal()"></button>
-        </div>
-
-        <div class="modal-body p-4">
-          <form #addForm="ngForm" (ngSubmit)="addUser(addForm)">
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Name</label>
-              <input type="text" name="name" class="form-control"
-                [(ngModel)]="newUser.name" placeholder="Enter name"
-                required pattern=".*\S.*" #addName="ngModel"
-                [class.is-invalid]="addName.invalid && addName.touched">
-              @if (addName.invalid && addName.touched) {
-                <div class="invalid-feedback">Full name is required</div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Email</label>
-              <input type="email" name="email" class="form-control"
-                [(ngModel)]="newUser.email" placeholder="Enter email"
-                required [pattern]="emailPattern" #addEmail="ngModel"
-                [class.is-invalid]="addEmail.invalid && addEmail.touched">
-              @if (addEmail.invalid && addEmail.touched) {
-                <div class="invalid-feedback">Please enter a valid email address</div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Phone Number</label>
-              <input type="text" name="phone" class="form-control"
-                [(ngModel)]="newUser.phone" placeholder="Enter phone"
-                required [pattern]="phonePattern" #addPhone="ngModel"
-                [class.is-invalid]="addPhone.invalid && addPhone.touched"
-                maxlength="10">
-              @if (addPhone.invalid && addPhone.touched) {
-                <div class="invalid-feedback">
-                  @if (addPhone.errors?.['required']) { Phone number is required }
-                  @else if (addPhone.errors?.['pattern']) { Please enter a valid 10-digit phone number }
-                </div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Password</label>
-              <div class="input-group">
-                <input [type]="showAddPasswordState ? 'text' : 'password'"
-                  name="password" class="form-control"
-                  [(ngModel)]="newUser.password" placeholder="Enter password"
-                  required minlength="8" pattern="\S+" #addPassword="ngModel"
-                  [class.is-invalid]="addPassword.invalid && addPassword.touched">
-                <button class="btn" type="button" (click)="togglePassword('add')">
-                  <i class="fa-regular"
-                    [ngClass]="showAddPasswordState ? 'fa-eye-slash' : 'fa-eye'"></i>
-                </button>
-              </div>
-              @if (addPassword.invalid && addPassword.touched) {
-                <div class="text-danger small mt-1">
-                  @if (addPassword.errors?.['required']) { Password is required }
-                  @else if (addPassword.errors?.['minlength']) { Password must be at least 8 characters }
-                  @else if (addPassword.errors?.['pattern']) { Password cannot contain spaces }
-                </div>
-              }
-            </div>
-
-            <div class="mb-4">
-              <label class="form-label fw-semibold">Role</label>
-              <select name="role" class="form-select"
-                [(ngModel)]="newUser.role" required>
-                @for (role of roles; track role) {
-                  <option [value]="role">{{ role }}</option>
-                }
-              </select>
-            </div>
-
-            <div class="d-flex justify-content-end gap-2">
-              <button type="button" class="btn btn-light"
-                (click)="closeAddModal()" [disabled]="isAdding">Cancel</button>
-              <button type="submit" class="btn btn-dark px-4 fw-bold"
-                [disabled]="addForm.invalid || isAdding">
-                @if (isAdding) {
-                  <span class="spinner-border spinner-border-sm me-2" role="status"></span>
-                  Creating...
-                } @else {
-                  Create User
-                }
-              </button>
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  }
-
-  <!-- Edit User Modal -->
-  @if (editingUser) {
-  <div class="modal d-block" style="background: rgba(0,0,0,0.5)" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow-lg">
-
-        <div class="modal-header border-bottom-0 p-4 pb-0">
-          <h5 class="modal-title fw-bold">Edit User Settings</h5>
-          <button type="button" class="btn-close" (click)="cancelEdit()"></button>
-        </div>
-
-        <div class="modal-body p-4">
-          <form #editForm="ngForm" (ngSubmit)="updateUser(editForm)">
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Full Name</label>
-              <input type="text" name="editName" class="form-control"
-                [(ngModel)]="editingUser.name" placeholder="Name"
-                required pattern=".*\S.*" #editName="ngModel"
-                [class.is-invalid]="editName.invalid && editName.touched">
-              @if (editName.invalid && editName.touched) {
-                <div class="invalid-feedback">Full name is required</div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Email</label>
-              <input type="email" name="editEmail" class="form-control"
-                [(ngModel)]="editingUser.email" placeholder="Email"
-                required [pattern]="emailPattern" #editEmail="ngModel"
-                [class.is-invalid]="editEmail.invalid && editEmail.touched">
-              @if (editEmail.invalid && editEmail.touched) {
-                <div class="invalid-feedback">Please enter a valid email address</div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">Phone Number</label>
-              <input type="text" name="editPhone" class="form-control"
-                [(ngModel)]="editingUser.phone" placeholder="Phone"
-                required [pattern]="phonePattern" #editPhone="ngModel"
-                maxlength="10"
-                [class.is-invalid]="editPhone.invalid && editPhone.touched">
-              @if (editPhone.invalid && editPhone.touched) {
-                <div class="invalid-feedback">
-                  @if (editPhone.errors?.['required']) { Phone number is required }
-                  @else if (editPhone.errors?.['pattern']) { Please enter a valid 10-digit phone number }
-                </div>
-              }
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-semibold">
-                New Password
-                <span class="text-muted fw-normal">(Leave blank to keep current)</span>
-              </label>
-              <div class="input-group">
-                <input [type]="showEditPasswordState ? 'text' : 'password'"
-                  name="editPassword" class="form-control"
-                  [(ngModel)]="editingUser.password" placeholder="New password"
-                  minlength="8" pattern="\S+" #editPassword="ngModel"
-                  [class.is-invalid]="editPassword.invalid && editPassword.touched">
-                <button class="btn" type="button" (click)="togglePassword('edit')">
-                  <i class="fa-regular"
-                    [ngClass]="showEditPasswordState ? 'fa-eye-slash' : 'fa-eye'"></i>
-                </button>
-              </div>
-              @if (editPassword.invalid && editPassword.touched) {
-                <div class="text-danger small mt-1">
-                  @if (editPassword.errors?.['minlength']) { Password must be at least 8 characters }
-                  @else if (editPassword.errors?.['pattern']) { Password cannot contain spaces }
-                </div>
-              }
-            </div>
-
-            <div class="d-flex justify-content-end gap-2 mt-4">
-              <button type="button" class="btn btn-light" (click)="cancelEdit()">Cancel</button>
-              <button type="submit" class="btn btn-dark px-4 fw-bold"
-                [disabled]="editForm.invalid">Save Changes</button>
-            </div>
-
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-  }
-
-  <!-- Delete User Modal -->
-  @if (deleteUserId !== null) {
-  <div class="modal d-block" style="background: rgba(0,0,0,0.5)" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content border-0 shadow-lg">
-        <div class="modal-body p-5 text-center">
-
-          <div class="mb-4">
-            <i class="fa-solid fa-trash-can fa-3x text-muted opacity-25"></i>
-          </div>
-          <h3 class="fw-bold mb-2">Confirm Delete</h3>
-          <p class="text-muted px-3 mb-0">
-            Are you sure you want to delete <strong class="text-dark">{{ deleteUserName }}</strong>?
-          </p>
-
-          <div class="d-flex justify-content-center gap-2 mt-4">
-            <button type="button" class="btn btn-light px-4" (click)="cancelDelete()">Cancel</button>
-            <button type="button" class="btn btn-dark px-4 fw-bold" (click)="deleteUser()">
-              Delete User
-            </button>
-          </div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-  }
 
 </div>

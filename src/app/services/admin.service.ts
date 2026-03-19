@@ -28,4 +28,10 @@ export class AdminService {
     deleteUser(userId: number): Observable<any> {
         return this.http.delete(`${this.apiUrl}/users/${userId}`);
     }
+
+    scanForm(file: File) {
+        const form = new FormData();
+        form.append('file', file);
+        return this.http.post<any>(`${this.apiUrl}/scan-form`, form);
+    }
 }
