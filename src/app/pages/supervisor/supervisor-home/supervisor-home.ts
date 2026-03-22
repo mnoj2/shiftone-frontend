@@ -146,7 +146,7 @@ export class SupervisorHome implements OnInit {
         style: { color: '#fff' },
         borderRadius: 8,
         headerFormat: '<b>{point.key}</b><br/>',
-        pointFormatter: function () { return `Production Time: ${this.y}h`; }
+        pointFormatter: function () { return `Work Hours: ${this.y}`; }
       },
       plotOptions: {
         areaspline: {

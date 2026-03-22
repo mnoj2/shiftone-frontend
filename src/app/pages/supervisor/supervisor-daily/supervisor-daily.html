@@ -1,6 +1,6 @@
-<div class="container py-0">
-  <div class="card border-0 shadow-sm mt-2">
-    <div class="card-body p-4 pb-3">
+<div class="container">
+  <div class="card border-0 mx-3">
+    <div class="card-body p-4">
 
       <div class="row g-3 mb-4">
         <div class="col-lg-8">
@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="col-lg-4 d-flex justify-content-lg-end align-items-end mt-3 mt-lg-0">
-          <button class="btn btn-dark fw-bold" (click)="exportDaily()">
+          <button class="btn btn-outline-dark fw-bold" (click)="exportDaily()">
             <i class="fa-solid fa-file-export me-2"></i>Export
           </button>
         </div>
@@ -35,11 +35,6 @@
       } @else if (isError) {
         <div class="alert alert-danger border-0">
           {{ errorMessage }}
-        </div>
-      } @else if (records.length === 0) {
-        <div class="text-center py-5 border rounded bg-white">
-          <i class="fa-solid fa-magnifying-glass fa-2x text-muted mb-3 opacity-25"></i>
-          <p class="text-muted mb-0">No records found for <b>{{ formatDate(dailyStart) }} - {{ formatDate(dailyEnd) }}</b></p>
         </div>
       } @else {
         <ag-grid-angular

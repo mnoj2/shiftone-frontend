@@ -1,7 +1,5 @@
-<div class="card border-0 shadow-sm">
+<div class="card border-0 mt-4">
   <div class="card-body p-4">
-
-    <h2 class="h4 fw-bold mb-4">User Management</h2>
 
     @if (isLoading) {
       <div class="text-center py-5">
@@ -11,7 +9,7 @@
     } @else if (users.length === 0) {
       <div class="text-center py-5 border rounded bg-white">
         <i class="fa-solid fa-user-slash fa-3x text-muted mb-3 opacity-25"></i>
-        <p class="text-muted mb-0">No users found.</p>
+        <p class="text-muted mb-0">No users found</p>
       </div>
     } @else {
       <ag-grid-angular
