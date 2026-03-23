@@ -90,33 +90,73 @@ export class WorkerHome implements OnInit, OnDestroy {
   }
 
   signIn(): void {
+    if (!navigator.geolocation) {
+      this.toast.error('Geolocation is not supported by this browser');
+      return;
+    }
+
     this.isLoading = true;
-    this.workerservice.signIn().subscribe({
-      next: () => {
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        this.workerservice.signIn(lat, lng).subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.loadTodayInfo();
+            this.toast.success('Signed In Successfully!');
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.toast.error(err.error.detail);
+          }
+        });
+    },
+    (error) => {
         this.isLoading = false;
-        this.loadTodayInfo();
-        this.toast.success('Signed In Successfully!');
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.toast.error(this.errorMessage);
+        if (error.code === error.PERMISSION_DENIED) {
+          this.toast.error('Location permission denied');
+        } else {
+          this.toast.error('Unable to retrieve location');
+        }
       }
-    });
+    );
   }
 
   signOff(): void {
+    if (!navigator.geolocation) {
+      this.toast.error('Geolocation is not supported by this browser');
+      return;
+    }
+
     this.isLoading = true;
-    this.workerservice.signOff().subscribe({
-      next: () => {
+
+    navigator.geolocation.getCurrentPosition((position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+
+        this.workerservice.signOff(lat, lng).subscribe({
+          next: () => {
+            this.isLoading = false;
+            this.loadTodayInfo();
+            this.toast.success('Signed Off Successfully!');
+          },
+          error: (err) => {
+            this.isLoading = false;
+            this.toast.error(err.error.detail);
+          }
+        });
+    },
+    (error) => {
         this.isLoading = false;
-        this.loadTodayInfo();
-        this.toast.success('Signed Off Successfully!');
-      },
-      error: (err) => {
-        this.isLoading = false;
-        this.toast.error(this.errorMessage);
+        if (error.code === error.PERMISSION_DENIED) {
+          this.toast.error('Location permission denied');
+        } else {
+          this.toast.error('Unable to retrieve location');
+        }
       }
-    });
+    );
   }
 
   checkUnfinishedRecords(): void {

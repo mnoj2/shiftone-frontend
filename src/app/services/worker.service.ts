@@ -16,11 +16,11 @@ export class WorkerService {
     return this.http.get<AttendanceInfo>(`${this.workerUrl}/today`);
   }
 
-  signIn(): Observable<any> {
-    return this.http.post(`${this.workerUrl}/signin`, {});
+  signIn(lat: any, lng: any): Observable<any> {
+    return this.http.post(`${this.workerUrl}/signin`, {lat, lng});
   }
 
-  signOff(): Observable<any> {
+  signOff(lat: any, lng: any): Observable<any> {
     return this.http.post(`${this.workerUrl}/signoff`, {});
   }
 
