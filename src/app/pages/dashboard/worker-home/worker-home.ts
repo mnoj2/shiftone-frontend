@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WorkerService } from '../../../services/worker.service';
-import { TokenService } from '../../../core/services/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
-import { ClockService } from '../../../core/services/clock.service';
 
 @Component({
   selector: 'app-worker-home',
@@ -28,8 +26,7 @@ export class WorkerHome implements OnInit, OnDestroy {
 
   constructor(
     private workerservice: WorkerService,
-    private toast: HotToastService,
-    public clock: ClockService
+    private toast: HotToastService
   ) {}
 
   ngOnInit(): void {

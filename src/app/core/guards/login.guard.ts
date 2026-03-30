@@ -12,10 +12,14 @@ export const loginGuard: CanActivateFn = () => {
   if (token && !tokenService.isTokenExpired(token) && role) {
     if (role === 'Supervisor') {
       router.navigate(['/supervisor']);
-    } else {
+    }
+    else if (role === 'Admin') {
+      router.navigate(['/admin']);
+    } 
+    else if (role === 'Worker') {
       router.navigate(['/dashboard']);
     }
-    return false; 
+    return false;
   }
 
   return true;

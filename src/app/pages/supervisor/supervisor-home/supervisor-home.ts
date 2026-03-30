@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SupervisorService } from '../../../services/supervisor.service';
 import { TokenService } from '../../../core/services/token.service';
-import { ClockService } from '../../../core/services/clock.service';
 import * as Highcharts from 'highcharts';
 import { HighchartsChartComponent } from 'highcharts-angular';
 
@@ -44,8 +43,7 @@ export class SupervisorHome implements OnInit {
 
   constructor(
     private supervisorservice: SupervisorService,
-    private token: TokenService,
-    public clock: ClockService
+    private token: TokenService  
   ) {}
 
   ngOnInit(): void {
