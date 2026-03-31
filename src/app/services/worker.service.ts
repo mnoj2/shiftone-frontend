@@ -21,7 +21,7 @@ export class WorkerService {
   }
 
   signOff(lat: any, lng: any): Observable<any> {
-    return this.http.post(`${this.workerUrl}/signoff`, {});
+    return this.http.post(`${this.workerUrl}/signoff`, {lat, lng});
   }
 
   manualSignOff(date: string, signOffTime: string): Observable<any> {
