@@ -22,7 +22,7 @@ export class SupervisorDaily implements OnInit {
   errorMessage = '';
   records: any[] = [];
 
-  today = ''
+  today = '';
   dailyStart = '';
   dailyEnd = '';
 
@@ -33,7 +33,7 @@ export class SupervisorDaily implements OnInit {
     flex: 1,
     minWidth: 120,
     sortable: true,
-    filter: true,
+    filter: false,
     resizable: true
   };
 
@@ -48,6 +48,7 @@ export class SupervisorDaily implements OnInit {
     {
       field: 'workerName',
       headerName: 'Worker Name',
+      filter: 'agTextColumnFilter',
       valueGetter: p => p.data.workerName || p.data.name
     },
     {
@@ -67,6 +68,7 @@ export class SupervisorDaily implements OnInit {
       headerName: 'Status',
       cellClass: 'text-center',
       valueFormatter: p => p.value || '-',
+      // Renders the status as a styled badge
       cellRenderer: (params: any) => {
         const badgeClass: Record<string, string> = {
           'SignedIn': 'signed-in',
@@ -101,6 +103,7 @@ export class SupervisorDaily implements OnInit {
     this.gridApi.sizeColumnsToFit();
   }
 
+  // Validates the date range and fetches attendance records for the selected period
   filterDaily(): void {
     if (!this.dailyStart || !this.dailyEnd) return;
 
@@ -111,6 +114,7 @@ export class SupervisorDaily implements OnInit {
 
     this.isLoading = true;
     this.isError = false;
+
     this.supervisorservice.getByDateRange(this.dailyStart, this.dailyEnd).subscribe({
       next: (res) => {
         this.records = res;
@@ -124,6 +128,7 @@ export class SupervisorDaily implements OnInit {
     });
   }
 
+  // Exports the current grid data to an Excel file
   exportDaily(): void {
     if (!this.records.length) {
       this.toast.error('No data to export');
@@ -135,6 +140,7 @@ export class SupervisorDaily implements OnInit {
     });
   }
 
+  // Formats a UTC time string to IST in 12-hour format
   formatTime(time: string | null): string {
     if (!time) return '-';
     const val = time.endsWith('Z') ? time : time + 'Z';
@@ -146,6 +152,7 @@ export class SupervisorDaily implements OnInit {
     });
   }
 
+  // Converts a decimal hours value to a readable hours and minutes string
   formatHours(hours: number | null): string {
     if (!hours || hours <= 0) return '-';
     let h = Math.floor(hours);
@@ -155,7 +162,8 @@ export class SupervisorDaily implements OnInit {
     return h > 0 ? `${h} hr ${m} min` : `${m} min`;
   }
 
+  // Formats a date string to a readable format
   formatDate(date: string) {
-    return new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+    return new Date(date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
   }
 }

@@ -22,22 +22,24 @@ export class AdminHome implements OnInit {
   gridTheme = appGridTheme;
 
   columnDefs: ColDef[] = [
-    { field: 'name', headerName: 'User Name' },
-    { field: 'email', headerName: 'Email' },
-    { field: 'phone', headerName: 'Phone' },
+    { field: 'name', headerName: 'User Name', filter: 'agTextColumnFilter' },
+    { field: 'email', headerName: 'Email', filter: 'agTextColumnFilter' },
+    { field: 'phone', headerName: 'Phone', filter: 'agTextColumnFilter' },
     {
       field: 'role', headerName: 'Role',
       cellClass: 'text-center',
+      // Renders the role as a styled pill badge
       cellRenderer: (params: any) => {
         const cls = this.getRoleClass(params.value);
         return `<span class="role-pill ${cls}">${params.value}</span>`;
       }
     },
-        {
+    {
       headerName: 'Actions',
       cellClass: 'd-flex align-items-center justify-content-center',
       pinned: 'right',
       width: 120,
+      // Hides the delete button if the row belongs to the currently logged-in user
       cellRenderer: (params: any) => {
         const currentUserId = this.token.getItem('userId');
         const isSelf = String(params.data.id) === String(currentUserId);
@@ -53,7 +55,13 @@ export class AdminHome implements OnInit {
               style="width:32px;height:32px;padding:0;" title="Delete User">
               <i class="fa-solid fa-trash-can"></i>
             </button>
-            ` : ''}
+            ` :
+            `
+            <button
+              style="width:32px;height:32px;padding:0;visibility:hidden;">
+            </button>
+            `
+            }
           </div>
         `;
       },
@@ -69,7 +77,7 @@ export class AdminHome implements OnInit {
     flex: 1,
     minWidth: 150,
     sortable: true,
-    filter: true,
+    filter: false,
     resizable: true
   };
 
@@ -92,6 +100,7 @@ export class AdminHome implements OnInit {
     this.loadUsers();
   }
 
+  // Fetches all users and sorts them by role order, then alphabetically by name
   loadUsers(): void {
     this.isLoading = true;
     this.adminService.getAllUsers().subscribe({
@@ -170,6 +179,7 @@ export class AdminHome implements OnInit {
     this.showEditPasswordState = !this.showEditPasswordState;
   }
 
+  // Returns the CSS class corresponding to the given role for badge styling
   getRoleClass(role: string): string {
     const map: Record<string, string> = {
       Admin:      'role-admin',

@@ -9,13 +9,14 @@ export const loginGuard: CanActivateFn = () => {
   const token = tokenService.getToken();
   const role = tokenService.getItem('role');
 
+  // Redirect already authenticated users to their respective home page
   if (token && !tokenService.isTokenExpired(token) && role) {
     if (role === 'Supervisor') {
       router.navigate(['/supervisor']);
     }
     else if (role === 'Admin') {
       router.navigate(['/admin']);
-    } 
+    }
     else if (role === 'Worker') {
       router.navigate(['/dashboard']);
     }

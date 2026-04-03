@@ -9,6 +9,7 @@ export const authGuard: CanActivateFn = (route) => {
   const token = tokenService.getToken();
   const requiredRole = route.data['role'];
 
+  // Redirect to login if token is missing or expired
   if (!token || tokenService.isTokenExpired(token)) {
     router.navigate(['/login']);
     return false;
@@ -19,6 +20,7 @@ export const authGuard: CanActivateFn = (route) => {
 
     const roleMatches = userRole && userRole.toLowerCase().trim() === requiredRole.toLowerCase().trim();
 
+    // Redirect to the user's respective home page if their role doesn't match the required role
     if (!roleMatches) {
       if (userRole?.toLowerCase() === 'admin') router.navigate(['/admin']);
       else if (userRole?.toLowerCase() === 'supervisor') router.navigate(['/supervisor']);

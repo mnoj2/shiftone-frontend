@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TokenService } from '../../core/services/token.service';
 import { AdminHome } from './admin-home/admin-home';
@@ -11,16 +11,11 @@ import { QuickEnroll } from './quick-enroll/quick-enroll';
   templateUrl: './admin.html',
   styleUrls: ['./admin.scss']
 })
-export class AdminComponent implements OnInit {
+export class AdminComponent {
 
   currentView: 'home' | 'enroll' = 'home';
-  userName = '';
 
   constructor(private token: TokenService) {}
-
-  ngOnInit(): void {
-    this.userName = this.token.getItem('userName') ?? '';
-  }
 
   onViewChange(view: 'home' | 'enroll'): void {
     this.currentView = view;

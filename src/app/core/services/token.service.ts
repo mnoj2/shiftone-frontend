@@ -1,4 +1,4 @@
-import { inject, Injectable, Injector } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
 import { firstValueFrom } from 'rxjs';

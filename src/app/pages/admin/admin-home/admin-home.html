@@ -13,14 +13,14 @@
       </div>
     } @else {
       <ag-grid-angular
-        style="width: 100%; padding: 5px 20px;"
+        style="width: 100%; padding: 5px 5px;"
         [rowData]="users"
         [columnDefs]="columnDefs"
         [defaultColDef]="defaultColDef"
         [animateRows]="true"
         [pagination]="true"
         [paginationPageSizeSelector]="false"
-        [paginationPageSize]="8"
+        [paginationPageSize]="9"
         [domLayout]="'autoHeight'"
         [theme]="gridTheme"
         (gridReady)="onGridReady($event)">
@@ -46,7 +46,7 @@
         <form #editForm="ngForm" (ngSubmit)="updateUser(editForm)">
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Full Name</label>
+            <label class="form-label fw-semibold">Full Name</label> <span class="text-danger ms-1">*</span>
             <input type="text" name="editName" class="form-control"
               [(ngModel)]="editingUser.name" placeholder="Name"
               required pattern=".*\S.*" #editName="ngModel"
@@ -57,7 +57,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Email</label>
+            <label class="form-label fw-semibold">Email</label> <span class="text-danger ms-1">*</span>
             <input type="email" name="editEmail" class="form-control"
               [(ngModel)]="editingUser.email" placeholder="Email"
               required [pattern]="emailPattern" #editEmail="ngModel"
@@ -68,7 +68,7 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label fw-semibold">Phone Number</label>
+            <label class="form-label fw-semibold">Phone Number</label> <span class="text-danger ms-1">*</span>
             <input type="text" name="editPhone" class="form-control"
               [(ngModel)]="editingUser.phone" placeholder="Phone"
               required [pattern]="phonePattern" #editPhone="ngModel"
@@ -84,8 +84,7 @@
 
           <div class="mb-3">
             <label class="form-label fw-semibold">
-              New Password
-              <span class="text-muted fw-normal">(Leave blank to keep current)</span>
+              New Password <small class="text-muted">(leave blank to keep current password)</small>
             </label>
             <div class="input-group">
               <input [type]="showEditPasswordState ? 'text' : 'password'"
@@ -128,7 +127,7 @@
       <div class="modal-body p-5 text-center">
 
         <div class="mb-4">
-          <i class="fa-solid fa-trash-can fa-3x text-muted opacity-25"></i>
+          <i class="fa-solid fa-trash-can fa-3x text-danger opacity-50"></i>
         </div>
         <h3 class="fw-bold mb-2">Confirm Delete</h3>
         <p class="text-muted px-3 mb-0">
@@ -137,7 +136,7 @@
 
         <div class="d-flex justify-content-center gap-2 mt-4">
           <button type="button" class="btn btn-light px-4" (click)="cancelDelete()">Cancel</button>
-          <button type="button" class="btn btn-dark px-4 fw-bold" (click)="deleteUser()">
+          <button type="button" class="btn btn-danger px-4 fw-bold" (click)="deleteUser()">
             Delete User
           </button>
         </div>

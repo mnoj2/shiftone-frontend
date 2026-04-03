@@ -1,15 +1,12 @@
 <div class="min-vh-100 d-flex flex-column">
   
-  <nav class="navbar navbar-expand-lg pt-3">
+  <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 pb-4 pt-4">
     <div class="container">
 
       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
-        <div class="d-flex flex-column">
-          <span class="fs-2 lh-1">ShiftOne</span>
-          <div class="d-flex align-items-center gap-1 mt-1">
-            <span class="text-muted fw-normal fs-6">{{ userName }}</span>
-            <span class="badge bg-secondary" style="font-size: 0.6rem; letter-spacing: 0.05em;">WORKER</span>
-          </div>
+        <div class="d-flex">
+          <img src="Logo.svg" alt="" width="35" height="35">
+          <span class="fs-2 lh-1 ms-1">ShiftOne</span>
         </div>
       </a>
 
@@ -17,8 +14,8 @@
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="nav mx-auto mt-3 mt-lg-0 d-flex gap-3">
+      <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+        <ul class="nav mt-3 mt-lg-0 d-flex gap-2">
           <li class="nav-item">
             <button class="nav-link px-2 fw-semibold" [class.active]="currentView === 'home'" (click)="onViewChange('home')">Home</button>
           </li>
@@ -27,7 +24,7 @@
           </li>
         </ul>
 
-        <button class="btn btn-outline-dark fw-bold mt-3 mt-lg-0" (click)="logout()">
+        <button class="btn btn-dark fw-bold mt-3 mt-lg-0 ms-5" (click)="logout()">
           Logout
         </button>
       </div>

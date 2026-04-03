@@ -36,6 +36,7 @@ export class QuickEnroll {
   ) {}
 
   // #region Upload
+  // Validates file type and size before storing the file and generating a preview URL
   onImageUpload(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
@@ -64,6 +65,7 @@ export class QuickEnroll {
   // #endregion
 
   // #region Scan
+  // Sends the uploaded image to the OCR service and populates the form with extracted data
   scanForm(): void {
     if (!this.uploadedFile) {
       this.toast.error('Please upload a form first');
@@ -89,6 +91,7 @@ export class QuickEnroll {
     });
   }
 
+  // Cancels the ongoing OCR scan by unsubscribing from the active request
   cancelScan(): void {
     this.extractionSub?.unsubscribe();
     this.extractionSub = null;
@@ -117,10 +120,11 @@ export class QuickEnroll {
     });
   }
 
+  // Resets the form and user model, preserving the uploaded image for potential re-use
   reset(form: any): void {
     this.user = { name: '', email: '', phone: '', password: '', role: 'Worker' };
-    this.previewUrl = null;
-    this.uploadedFile = null;
+    // this.previewUrl = null;
+    // this.uploadedFile = null;
     this.showPasswordState = false;
     this.extractionSub = null;
     form.resetForm();

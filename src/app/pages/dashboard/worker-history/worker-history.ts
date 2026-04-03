@@ -53,6 +53,7 @@ export class WorkerHistory implements OnInit {
       field: 'status',
       headerName: 'Status',
       cellClass: 'text-center',
+      // Renders the status as a styled badge
       cellRenderer: (params: any) => {
         const badgeClass: Record<string, string> = {
           'SignedIn': 'signed-in',
@@ -75,6 +76,7 @@ export class WorkerHistory implements OnInit {
       sortable: false,
       filter: false,
       resizable: false,
+      // Shows a manual sign-off button only for past records that are still signed in
       cellRenderer: (params: any) => {
         const isToday = new Date(params.data.date).toDateString() === new Date().toDateString();
 
@@ -114,6 +116,7 @@ export class WorkerHistory implements OnInit {
     if (this.token.getItem('userId')) this.loadWorkHistory();
   }
 
+  // Fetches the worker's full attendance history
   loadWorkHistory(): void {
     this.isLoading = true;
     this.workerservice.getMyHistory().subscribe({
@@ -128,12 +131,14 @@ export class WorkerHistory implements OnInit {
     });
   }
 
+  // Opens the manual sign-off modal for the selected record
   openManualSignOffModal(record: any): void {
     this.pendingRecord = record;
     this.pendingSignOffTimeInput = '';
     this.showSignOffModal = true;
   }
 
+  // Validates the entered sign-off time and submits the manual sign-off request
   onConfirmSignOff(): void {
     if (!this.pendingSignOffTimeInput || !this.pendingRecord) return;
 
@@ -148,12 +153,14 @@ export class WorkerHistory implements OnInit {
       : this.pendingRecord.signInTime + 'Z';
     const signInDate = new Date(signInTimeStr);
 
+    // If sign-off time is before sign-in, assume it rolled over to the next day
     if (signOffDate <= signInDate) {
       signOffDate.setDate(signOffDate.getDate() + 1);
     }
 
     const diffMs = signOffDate.getTime() - signInDate.getTime();
 
+    // Reject if the duration is invalid or exceeds 12 hours
     if (diffMs <= 0 || diffMs > 12 * 60 * 60 * 1000) {
       this.toast.error('Please enter a valid sign-off time within 12 hours of sign-in');
       this.isConfirming = false;
@@ -178,6 +185,7 @@ export class WorkerHistory implements OnInit {
     params.api.sizeColumnsToFit();
   }
 
+  // Formats a UTC time string to IST in 12-hour format
   formatTime(time: string | null): string {
     if (!time) return '-';
     const timeValue = time.endsWith('Z') ? time : time + 'Z';
@@ -189,6 +197,7 @@ export class WorkerHistory implements OnInit {
     });
   }
 
+  // Converts a decimal hours value to a readable hours and minutes string
   formatHours(hours: number | null): string {
     if (!hours || hours <= 0) return '-';
     let h = Math.floor(hours);
@@ -197,7 +206,7 @@ export class WorkerHistory implements OnInit {
       h += 1;
       m = 0;
     }
-    if(h > 0 && m === 0) return `${h} hr`;
+    if (h > 0 && m === 0) return `${h} hr`;
     return h > 0 ? `${h} hr ${m} min` : `${m} min`;
   }
 }

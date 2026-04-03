@@ -1,6 +1,6 @@
 import { Component, NgZone } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { AuthService } from '../../core/services/auth.service'; 
+import { AuthService } from '../../core/services/auth.service';
 import { TokenService } from '../../core/services/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -31,6 +31,7 @@ export class Login {
     private toast: HotToastService
   ) {}
 
+  // Authenticates the user, stores tokens and claims, then redirects based on role
   onSubmit(form: NgForm): void {
     if (form.invalid) return;
 
@@ -41,6 +42,7 @@ export class Login {
         this.tokenService.setToken(res.accessToken);
         this.tokenService.setRefreshToken(res.refreshToken);
 
+        // Decode the token to extract user claims
         const decoded = this.tokenService.getDecodedToken(res.accessToken);
         let role = decoded?.['role'] ?? decoded?.['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
         const id = decoded?.['id'];
@@ -53,6 +55,7 @@ export class Login {
         this.toast.success('Login successful! Redirecting...');
         this.loading = false;
 
+        // Delay navigation slightly to allow the toast to display before redirect
         setTimeout(() => {
           this.ngZone.run(() => {
             const routes: Record<string, string> = {

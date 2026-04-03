@@ -43,10 +43,11 @@ export class SupervisorHome implements OnInit {
 
   constructor(
     private supervisorservice: SupervisorService,
-    private token: TokenService  
+    private token: TokenService
   ) {}
 
   ngOnInit(): void {
+    // Extract the supervisor's name from the decoded token
     const token = this.token.getToken();
     if (token) {
       const decoded = this.token.getDecodedToken(token);
@@ -58,10 +59,13 @@ export class SupervisorHome implements OnInit {
   }
 
   // --- Home Logic ---
+
+  // Fetches the home summary for the given date, or today if no date is provided
   loadHomeData(date: string | null = null): void {
     this.selectedHomeDate = date;
     this.isLoading = true;
     this.isError = false;
+
     this.supervisorservice.getSupervisorHomeSummary(date).subscribe({
       next: (res) => {
         this.homeData = res;
@@ -74,19 +78,23 @@ export class SupervisorHome implements OnInit {
     });
   }
 
+  // Programmatically opens the date picker input
   triggerDatePicker(): void {
     this.dateInput?.nativeElement.showPicker();
   }
 
+  // Reloads home data when the user selects a different date
   onHomeDateChange(event: any): void {
     this.loadHomeData(event.target.value);
   }
 
+  // Clears the selected date and reloads today's summary
   resetHomeDate(): void {
     if (this.dateInput) this.dateInput.nativeElement.value = '';
     this.loadHomeData(null);
   }
 
+  // Returns a formatted display label for the currently selected home date
   getHomeDisplayDate(): string {
     if (!this.selectedHomeDate) return "Today's Overview";
     return new Date(this.selectedHomeDate).toLocaleDateString('en-US', {
@@ -95,6 +103,8 @@ export class SupervisorHome implements OnInit {
   }
 
   // --- Analytics Logic ---
+
+  // Builds the list of selectable years, including next year if past October
   generateYearList(): void {
     const currentYear = new Date().getFullYear();
     this.years = [];
@@ -102,8 +112,10 @@ export class SupervisorHome implements OnInit {
     if (new Date().getMonth() >= 9) this.years.push(currentYear + 1);
   }
 
+  // Fetches analytics data for the selected month and year and renders the chart if data exists
   loadAnalytics(): void {
     this.analyticsLoading = true;
+
     this.supervisorservice.getAnalytics(this.selectedMonth, this.selectedYear).subscribe({
       next: (res) => {
         this.analyticsData = res;
@@ -117,6 +129,7 @@ export class SupervisorHome implements OnInit {
     });
   }
 
+  // Builds and applies the Highcharts area chart configuration for monthly working hours, excluding weekends
   private renderMonthlyChart(monthlyHours: any[]): void {
     const filtered = monthlyHours.filter(x => {
       const day = new Date(`${x.date} ${this.selectedYear}`).getDay();

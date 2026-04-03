@@ -3,11 +3,11 @@
 :root {
   --main-black: #212529;
   --main-white: #ffffff;
-  --ag-font-family: 'Outfit', sans-serif;
+  --ag-font-family: 'Poppins', sans-serif;
 }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: var(--ag-font-family);
   color: var(--main-black);
   margin: 0;
   padding: 0;
@@ -88,7 +88,7 @@ body {
   color: #212529;
   border-bottom: 3px solid transparent;
   border-radius: 0;
-  padding-bottom: 3px;
+  padding-bottom: 1px !important;
   transition: border-color 0.2s ease;
 
   &:hover {
@@ -100,4 +100,8 @@ body {
     border-bottom-color: #212529;
     background: none;
   }
+}
+
+.nav-item:hover {
+  background-color: hsl(0, 0%, 90%);
 }
