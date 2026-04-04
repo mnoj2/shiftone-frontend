@@ -167,13 +167,29 @@ export class SupervisorHome implements OnInit {
           },
           marker: { radius: 4, lineColor: '#10b981', lineWidth: 2, fillColor: '#fff' },
           lineColor: '#10b981',
-          lineWidth: 3
+          lineWidth: 3,
+          dataLabels: {
+            enabled: true,
+            allowOverlap: true,           
+            style: {
+              fontSize: '12px',
+              fontWeight: '600',
+              color: '#10b981',
+              textOutline: '2px white'    
+            },
+            formatter: function () { return `${this.y}h`; }
+          }
         }
       },
       series: [{
         name: 'Production Man-Hours',
         type: 'areaspline',
-        data: filtered.map(x => x.hours)
+        data: filtered.map((x, i) => ({
+          y: x.hours,
+          dataLabels: {
+            y: i % 2 === 0 ? -5 : 30
+          }
+        }))
       } as Highcharts.SeriesAreasplineOptions]
     };
 
