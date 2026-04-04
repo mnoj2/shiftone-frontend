@@ -1,8 +1,8 @@
-<div class="row g-4 mx-3 pt-3">
+<div class="row g-5 mt-1 justify-content-center">
 
   <!-- Left — image preview -->
   <div class="col-md-5">
-    <div class="card border-0 h-100">
+    <div class="card border-0 shadow-sm h-100"> 
       <div class="card-body p-4 d-flex flex-column">
 
         <div class="d-flex justify-content-between align-items-center mb-3">
@@ -11,30 +11,31 @@
             #fileInput hidden (change)="onImageUpload($event)">
         </div>
 
-        <div class="flex-grow-1">
+        <div class="flex-grow-1 d-flex flex-column">
           @if (!previewUrl) {
-            <div class="border rounded d-flex flex-column align-items-center justify-content-center gap-3 bg-white"
-              style="height: 410px; cursor: pointer; border-style: dashed !important;
-                    border-color: #ccc !important; border-width: 2px !important;"
+            <div class="border rounded d-flex flex-column align-items-center justify-content-center gap-3 bg-white flex-grow-1 px-3"
+              style="cursor: pointer; border-style: dashed !important;
+                    border-color: #999999 !important; border-width: 2px !important;"
               (click)="fileInput.click()">
+              
               <i class="fa-solid fa-cloud-arrow-up fa-3x text-muted opacity-50"></i>
               <div class="text-center">
-                <p class="fw-semibold text-muted mb-1">Click to upload</p>
-                <p class="text-muted small mb-0">JPG, PNG or WebP — max 5MB</p>
+                <p class="fw-bold text-muted mb-1">Click here to upload</p>
+                <p class="text-secondary-emphasis small mb-0">Supported Formats: JPG, PNG or WebP — max 5MB</p>
               </div>
             </div>
           } @else {
-            <div class="position-relative">
+            <div class="position-relative flex-grow-1 d-flex">
               <button class="btn btn-dark btn-sm position-absolute"
                 style="top: 8px; right: 8px; z-index: 1; width: 27px; height: 27px;
                       padding: 0; border-radius: 50%;"
                 (click)="clearImage()" title="Remove Image">
                 <i class="fa-solid fa-xmark" style="font-size: 13px;"></i>
               </button>
-              <div class="border rounded bg-white p-2 d-flex align-items-center justify-content-center" 
-                  style="height: 410px;">
+              
+              <div class="border rounded bg-white p-2 d-flex align-items-center justify-content-center flex-grow-1">
                 <img [src]="previewUrl"
-                  style="max-height: 100%; max-width: 100%; object-fit: contain;"
+                  style="width: 100%; height: auto; max-height: 100%; object-fit: contain;"
                   class="rounded" alt="Uploaded form">
               </div>
             </div>
@@ -42,7 +43,6 @@
         </div>
 
         <div class="d-flex justify-content-end align-items-center gap-2 mt-4">
-          
           @if (isExtracting) {
             <button type="button" class="btn btn-light text-dark text-decoration-none fw-bold"
               (click)="cancelScan()">
@@ -60,7 +60,6 @@
               Scan Image
             }
           </button>
-
         </div>
 
       </div>
@@ -68,8 +67,8 @@
   </div>
 
   <!-- Right — user form -->
-  <div class="col-md-7">
-    <div class="card border-1" style="margin: 60px 60px 0 60px">
+  <div class="col-md-5">
+    <div class="card border-0 shadow-sm">
       <div class="card-body p-4">
 
         <h2 class="h5 fw-bold mb-4">Add User</h2>
@@ -99,7 +98,7 @@
               }
             </div>
 
-            <div class="col-md-6">
+            <div class="col-12">
               <label class="form-label fw-semibold small">Phone</label> <span class="text-danger ms-1">*</span>
               <input type="text" name="phone" class="form-control"
                 [(ngModel)]="user.phone" placeholder="Enter phone"
@@ -114,7 +113,7 @@
               }
             </div>
 
-            <div class="col-md-6">
+            <div class="col-12">
               <label class="form-label fw-semibold small">Role</label> <span class="text-danger ms-1">*</span>
               <select name="role" class="form-select"
                 [(ngModel)]="user.role" required>

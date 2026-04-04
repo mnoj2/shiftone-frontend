@@ -1,35 +1,32 @@
-<div class="card border-0 mt-4">
-  <div class="card-body p-4">
+<div class="container mt-4">
 
-    @if (isLoading) {
-      <div class="text-center py-5">
-        <div class="spinner-border text-dark mb-3" role="status"></div>
-        <p class="text-muted">Loading users...</p>
-      </div>
-    } @else if (users.length === 0) {
-      <div class="text-center py-5 border rounded bg-white">
-        <i class="fa-solid fa-user-slash fa-3x text-muted mb-3 opacity-25"></i>
-        <p class="text-muted mb-0">No users found</p>
-      </div>
-    } @else {
-      <ag-grid-angular
-        style="width: 100%; padding: 5px 5px;"
-        [rowData]="users"
-        [columnDefs]="columnDefs"
-        [defaultColDef]="defaultColDef"
-        [animateRows]="true"
-        [pagination]="true"
-        [paginationPageSizeSelector]="false"
-        [paginationPageSize]="9"
-        [domLayout]="'autoHeight'"
-        [theme]="gridTheme"
-        (gridReady)="onGridReady($event)">
-      </ag-grid-angular>
-    }
+  @if (isLoading) {
+    <div class="text-center py-5">
+      <div class="spinner-border text-dark mb-3" role="status"></div>
+      <p class="text-muted">Loading users...</p>
+    </div>
+  } @else if (users.length === 0) {
+    <div class="text-center py-5 border rounded bg-white">
+      <i class="fa-solid fa-user-slash fa-3x text-muted mb-3 opacity-25"></i>
+      <p class="text-muted mb-0">No users found</p>
+    </div>
+  } @else { 
+    <ag-grid-angular
+      style="width: 100%; padding: 5px 5px; padding-top: 20px;"
+      [rowData]="users"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [animateRows]="true"
+      [pagination]="true"
+      [paginationPageSizeSelector]="false"
+      [paginationPageSize]="10"
+      [domLayout]="'autoHeight'"
+      [theme]="gridTheme"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+  }
 
-  </div>
 </div>
-
 
 <!-- Edit User Modal -->
 @if (editingUser) {

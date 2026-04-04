@@ -1,12 +1,12 @@
 <div class="min-vh-100 d-flex flex-column">
 
-  <nav class="navbar navbar-expand-lg bg-white shadow-sm py-3 pb-4 pt-4">
+  <nav class="navbar navbar-expand-lg bg-white border border-1 border-secondary-subtle">
     <div class="container">
 
       <a class="navbar-brand fw-bold d-flex align-items-center gap-2" href="#">
         <div class="d-flex">
-          <img src="Logo.svg" alt="" width="35" height="35">
-          <span class="fs-2 lh-1 ms-1">ShiftOne</span>
+          <img src="Logo.svg" alt="" width="43" height="43">
+          <span class="fs-3 ms-1">ShiftOne</span>
         </div>
       </a>
 
@@ -15,7 +15,7 @@
       </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="supervisorNavbar">
-        <ul class="nav mt-3 mt-lg-0 d-flex gap-2">
+        <ul class="nav mt-3 mt-lg-0 d-flex gap-3">
           <li class="nav-item">
             <button class="nav-link px-2 fw-semibold" [class.active]="currentView === 'home'" (click)="onViewChange('home')">Home</button>
           </li>

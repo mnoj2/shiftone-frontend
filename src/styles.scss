@@ -3,11 +3,12 @@
 :root {
   --main-black: #212529;
   --main-white: #ffffff;
-  --ag-font-family: 'Poppins', sans-serif;
+  --ag-font-family: 'Open Sans', sans-serif;
 }
 
 body {
   font-family: var(--ag-font-family);
+  background-color: #f2f2f2;
   color: var(--main-black);
   margin: 0;
   padding: 0;
@@ -87,6 +88,7 @@ body {
 .nav .nav-link {
   color: #212529;
   border-bottom: 3px solid transparent;
+  padding: 0 !important;
   border-radius: 0;
   padding-bottom: 1px !important;
   transition: border-color 0.2s ease;
@@ -96,12 +98,6 @@ body {
   }
 
   &.active {
-    color: #212529;
     border-bottom-color: #212529;
-    background: none;
   }
-}
-
-.nav-item:hover {
-  background-color: hsl(0, 0%, 90%);
 }

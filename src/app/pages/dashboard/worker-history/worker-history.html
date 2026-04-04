@@ -1,6 +1,4 @@
 <div class="container px-5 pt-3">
-  <div class="card border-0">
-    <div class="card-body p-4">
 
       @if (isLoading) {
         <div class="text-center py-5">
@@ -25,15 +23,13 @@
           [animateRows]="true"
           [pagination]="true"
           [paginationPageSizeSelector]="false"
-          [paginationPageSize]="8"
+          [paginationPageSize]="10"
           [domLayout]="'autoHeight'"
           [theme]="gridTheme"
           (gridReady)="onGridReady($event)">
         </ag-grid-angular>
       }
 
-    </div>
-  </div>
 </div>
 
 

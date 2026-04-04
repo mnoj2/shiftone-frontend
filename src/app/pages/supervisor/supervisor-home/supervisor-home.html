@@ -106,7 +106,7 @@
             </div>
           </div>
 
-          <div style="height: 347px;" class="d-flex align-items-center justify-content-center position-relative">
+          <div style="height: 340px;" class="d-flex align-items-center justify-content-center position-relative">
             @if (analyticsLoading) {
               <div class="position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-white rounded" style="z-index: 10; opacity: 0.85;">
                 <div class="text-center">
@@ -120,7 +120,7 @@
               <highcharts-chart
                 [options]="hoursChartOptions"
                 [(update)]="updateHoursChart"
-                style="width: 99%; height: 347px; display: block;">
+                style="width: 99%; height: 340px; display: block;">
               </highcharts-chart>
             } @else if (!analyticsLoading) {
               <div class="text-center text-muted opacity-50">
