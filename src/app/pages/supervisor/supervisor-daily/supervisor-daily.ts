@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { SupervisorService } from '../../../services/supervisor.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import { appGridTheme } from '../../../utils/ag-grid-theme';
 import 'ag-grid-enterprise';
 
@@ -33,7 +33,7 @@ export class SupervisorDaily implements OnInit {
     flex: 1,
     minWidth: 120,
     sortable: true,
-    filter: false,
+    filter: true,
     resizable: true
   };
 
@@ -41,6 +41,20 @@ export class SupervisorDaily implements OnInit {
     {
       field: 'date',
       headerName: 'Date',
+      filter: 'agDateColumnFilter',
+      filterParams: {
+        suppressTime: true,  
+        comparator: (filterDate: Date, cellValue: string) => {
+          if (!cellValue) return -1;
+          const cellDate = new Date(cellValue);
+          
+          const cellDateOnly = new Date(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate());
+          const filterDateOnly = new Date(filterDate.getFullYear(), filterDate.getMonth(), filterDate.getDate());
+          if (cellDateOnly < filterDateOnly) return -1;
+          if (cellDateOnly > filterDateOnly) return 1;
+          return 0;
+        }
+      },
       valueFormatter: p => p.value
         ? new Date(p.value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
         : '-'
@@ -49,17 +63,33 @@ export class SupervisorDaily implements OnInit {
       field: 'workerName',
       headerName: 'Worker Name',
       filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith'],
+        maxNumConditions: 1,
+      },
       valueGetter: p => p.data.workerName || p.data.name
     },
     {
       field: 'signInTime',
       headerName: 'Start Time',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatTime(p.data?.signInTime),
       cellClass: 'text-center',
       valueFormatter: p => this.formatTime(p.value)
     },
     {
       field: 'signOffTime',
       headerName: 'End Time',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatTime(p.data?.signOffTime),
       cellClass: 'text-center',
       valueFormatter: p => this.formatTime(p.value)
     },
@@ -67,6 +97,7 @@ export class SupervisorDaily implements OnInit {
       field: 'status',
       headerName: 'Status',
       cellClass: 'text-center',
+      filter: false,
       valueFormatter: p => p.value || '-',
       // Renders the status as a styled badge
       cellRenderer: (params: any) => {
@@ -82,6 +113,12 @@ export class SupervisorDaily implements OnInit {
       field: 'totalHours',
       headerName: 'Hours Worked',
       cellClass: 'text-center',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatHours(p.data?.totalHours),
       valueFormatter: p => this.formatHours(p.value)
     }
   ];

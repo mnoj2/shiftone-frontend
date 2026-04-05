@@ -5,7 +5,7 @@ import { WorkerService } from '../../../services/worker.service';
 import { TokenService } from '../../../core/services/token.service';
 import { HotToastService } from '@ngneat/hot-toast';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, ValueGetterParams } from 'ag-grid-community';
 import { appGridTheme } from '../../../utils/ag-grid-theme';
 
 @Component({
@@ -33,6 +33,20 @@ export class WorkerHistory implements OnInit {
     {
       field: 'date',
       headerName: 'Date',
+      filter: 'agDateColumnFilter',
+      filterParams: {
+        suppressTime: true,  
+        comparator: (filterDate: Date, cellValue: string) => {
+          if (!cellValue) return -1;
+          const cellDate = new Date(cellValue);
+          
+          const cellDateOnly = new Date(cellDate.getFullYear(), cellDate.getMonth(), cellDate.getDate());
+          const filterDateOnly = new Date(filterDate.getFullYear(), filterDate.getMonth(), filterDate.getDate());
+          if (cellDateOnly < filterDateOnly) return -1;
+          if (cellDateOnly > filterDateOnly) return 1;
+          return 0;
+        }
+      },
       valueFormatter: p => p.value
         ? new Date(p.value).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
         : '-'
@@ -41,12 +55,24 @@ export class WorkerHistory implements OnInit {
       field: 'signInTime',
       headerName: 'Sign In',
       cellClass: 'text-center',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatTime(p.data?.signInTime),
       valueFormatter: p => this.formatTime(p.value)
     },
     {
       field: 'signOffTime',
       headerName: 'Sign Off',
       cellClass: 'text-center',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains', 'startsWith'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatTime(p.data?.signOffTime),
       valueFormatter: p => this.formatTime(p.value)
     },
     {
@@ -67,6 +93,12 @@ export class WorkerHistory implements OnInit {
       field: 'totalHours',
       headerName: 'Hours',
       cellClass: 'text-center',
+      filter: 'agTextColumnFilter',
+      filterParams: {
+        filterOptions: ['contains'],
+        maxNumConditions: 1,
+      },
+      filterValueGetter: (p: ValueGetterParams) => this.formatHours(p.data?.totalHours),
       valueFormatter: p => this.formatHours(p.value)
     },
     {
